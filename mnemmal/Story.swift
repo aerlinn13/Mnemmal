@@ -9,11 +9,17 @@
 import Foundation
 
 struct Story {
-    var id: Int
+    var isActive: Bool
     var title: String
     var daysAmount: Int
+    var id: String
+    var genre: String
+    var currentDayForStory: String
     var words: Array<String>
+    var subtext: String
     var premium: Bool
     var titleColor: String
     var wordsColor: String
+    var image: String
+    var hidden: Bool
 }

@@ -16,6 +16,9 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var storySubheader: UILabel!
     
+    @IBOutlet weak var getButton: UIButton!
+    
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

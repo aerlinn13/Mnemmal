@@ -9,7 +9,8 @@
 import Foundation
 
 struct User {
-    var id: Int
-    var username: Int
-    var storiesActive: Array<Int>
+    var id: String?
+    var storiesActive: Array<String>?
+    var status: String?
+    var premiumExpires: Date?
 }

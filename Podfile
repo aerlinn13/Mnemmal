@@ -7,6 +7,8 @@ target 'mnemmal' do
 
   # Pods for mnemmal
 pod 'Firebase'
+pod 'Firebase/Auth'
+pod 'Firebase/Database'
 
   target 'mnemmalTests' do
     inherit! :search_paths

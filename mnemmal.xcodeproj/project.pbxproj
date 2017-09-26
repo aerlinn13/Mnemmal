@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1FF9A33651DFC6A07355E73D /* Pods_mnemmal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1CFC409A9A79240A122C454 /* Pods_mnemmal.framework */; };
 		6F308A3E3C997C1C54FF27F5 /* Pods_mnemmalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2675D6EEC436E5B4CE15D8A2 /* Pods_mnemmalTests.framework */; };
+		831F714F1F61F50100708390 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831F714E1F61F50100708390 /* Extensions.swift */; };
+		8339C2911F69BD1900C0EC63 /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8339C2901F69BD1800C0EC63 /* Word.swift */; };
 		834E210F1F5F5D1700BC8F21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E210E1F5F5D1700BC8F21 /* AppDelegate.swift */; };
 		834E21111F5F5D1700BC8F21 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E21101F5F5D1700BC8F21 /* MainVC.swift */; };
 		834E21141F5F5D1700BC8F21 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 834E21121F5F5D1700BC8F21 /* Main.storyboard */; };
@@ -22,6 +24,12 @@
 		834E21431F609EAF00BC8F21 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E21421F609EAF00BC8F21 /* User.swift */; };
 		834E21471F60A53500BC8F21 /* MainCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E21451F60A53500BC8F21 /* MainCollectionViewCell.swift */; };
 		834E21481F60A53500BC8F21 /* MainCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 834E21461F60A53500BC8F21 /* MainCollectionViewCell.xib */; };
+		836372BE1F76F3070063625C /* SubtextCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836372BC1F76F3060063625C /* SubtextCollectionViewCell.swift */; };
+		836372BF1F76F3070063625C /* SubtextCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 836372BD1F76F3070063625C /* SubtextCollectionViewCell.xib */; };
+		836372C21F76F35E0063625C /* WordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836372C01F76F35E0063625C /* WordCollectionViewCell.swift */; };
+		836372C31F76F35E0063625C /* WordCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 836372C11F76F35E0063625C /* WordCollectionViewCell.xib */; };
+		839B41361F7A9A6A003B2B00 /* WordOverlookVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */; };
+		83F18A9D1F6E79A400981A72 /* SubmissionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F18A9C1F6E79A400981A72 /* SubmissionVC.swift */; };
 		D5A3F8FF241851599F73E731 /* Pods_mnemmalUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E43710402DC410FAAF5C4926 /* Pods_mnemmalUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +58,8 @@
 		61B59FAD731AA0198A71B387 /* Pods-mnemmal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mnemmal.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mnemmal/Pods-mnemmal.debug.xcconfig"; sourceTree = "<group>"; };
 		61E6673C5271A2497F9481FA /* Pods-mnemmalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mnemmalTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-mnemmalTests/Pods-mnemmalTests.release.xcconfig"; sourceTree = "<group>"; };
 		7809340EF58C66DA76817E1C /* Pods-mnemmalUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mnemmalUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-mnemmalUITests/Pods-mnemmalUITests.release.xcconfig"; sourceTree = "<group>"; };
+		831F714E1F61F50100708390 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		8339C2901F69BD1800C0EC63 /* Word.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
 		834E210B1F5F5D1700BC8F21 /* mnemmal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mnemmal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		834E210E1F5F5D1700BC8F21 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		834E21101F5F5D1700BC8F21 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
@@ -69,6 +79,12 @@
 		834E21421F609EAF00BC8F21 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		834E21451F60A53500BC8F21 /* MainCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainCollectionViewCell.swift; sourceTree = "<group>"; };
 		834E21461F60A53500BC8F21 /* MainCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainCollectionViewCell.xib; sourceTree = "<group>"; };
+		836372BC1F76F3060063625C /* SubtextCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtextCollectionViewCell.swift; sourceTree = "<group>"; };
+		836372BD1F76F3070063625C /* SubtextCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SubtextCollectionViewCell.xib; sourceTree = "<group>"; };
+		836372C01F76F35E0063625C /* WordCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordCollectionViewCell.swift; sourceTree = "<group>"; };
+		836372C11F76F35E0063625C /* WordCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WordCollectionViewCell.xib; sourceTree = "<group>"; };
+		839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordOverlookVC.swift; sourceTree = "<group>"; };
+		83F18A9C1F6E79A400981A72 /* SubmissionVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubmissionVC.swift; sourceTree = "<group>"; };
 		E1CFC409A9A79240A122C454 /* Pods_mnemmal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mnemmal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E43710402DC410FAAF5C4926 /* Pods_mnemmalUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mnemmalUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -126,11 +142,13 @@
 		834E210D1F5F5D1700BC8F21 /* mnemmal */ = {
 			isa = PBXGroup;
 			children = (
+				834E21441F609F8F00BC8F21 /* Models */,
 				834E210E1F5F5D1700BC8F21 /* AppDelegate.swift */,
 				834E21101F5F5D1700BC8F21 /* MainVC.swift */,
-				834E21451F60A53500BC8F21 /* MainCollectionViewCell.swift */,
-				834E21461F60A53500BC8F21 /* MainCollectionViewCell.xib */,
-				834E21441F609F8F00BC8F21 /* Models */,
+				83F18A9C1F6E79A400981A72 /* SubmissionVC.swift */,
+				839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */,
+				831F714E1F61F50100708390 /* Extensions.swift */,
+				839193061F741A45009A2069 /* CollectionCells */,
 				834E213C1F60970600BC8F21 /* GoogleService-Info.plist */,
 				834E21121F5F5D1700BC8F21 /* Main.storyboard */,
 				834E21151F5F5D1800BC8F21 /* Assets.xcassets */,
@@ -162,10 +180,24 @@
 			isa = PBXGroup;
 			children = (
 				834E213E1F609C2A00BC8F21 /* Story.swift */,
+				8339C2901F69BD1800C0EC63 /* Word.swift */,
 				834E21401F609E2D00BC8F21 /* StoryInstance.swift */,
 				834E21421F609EAF00BC8F21 /* User.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		839193061F741A45009A2069 /* CollectionCells */ = {
+			isa = PBXGroup;
+			children = (
+				834E21451F60A53500BC8F21 /* MainCollectionViewCell.swift */,
+				834E21461F60A53500BC8F21 /* MainCollectionViewCell.xib */,
+				836372BC1F76F3060063625C /* SubtextCollectionViewCell.swift */,
+				836372BD1F76F3070063625C /* SubtextCollectionViewCell.xib */,
+				836372C01F76F35E0063625C /* WordCollectionViewCell.swift */,
+				836372C11F76F35E0063625C /* WordCollectionViewCell.xib */,
+			);
+			name = CollectionCells;
 			sourceTree = "<group>";
 		};
 		A9ED45B0E8527A7DDB32A8E4 /* Pods */ = {
@@ -263,7 +295,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Danil Chernyshev";
 				TargetAttributes = {
 					834E210A1F5F5D1700BC8F21 = {
@@ -310,11 +342,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				836372BF1F76F3070063625C /* SubtextCollectionViewCell.xib in Resources */,
 				834E21191F5F5D1800BC8F21 /* LaunchScreen.storyboard in Resources */,
 				834E213D1F60970600BC8F21 /* GoogleService-Info.plist in Resources */,
 				834E21161F5F5D1800BC8F21 /* Assets.xcassets in Resources */,
 				834E21481F60A53500BC8F21 /* MainCollectionViewCell.xib in Resources */,
 				834E21141F5F5D1700BC8F21 /* Main.storyboard in Resources */,
+				836372C31F76F35E0063625C /* WordCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,12 +511,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				836372BE1F76F3070063625C /* SubtextCollectionViewCell.swift in Sources */,
+				83F18A9D1F6E79A400981A72 /* SubmissionVC.swift in Sources */,
+				839B41361F7A9A6A003B2B00 /* WordOverlookVC.swift in Sources */,
 				834E21411F609E2D00BC8F21 /* StoryInstance.swift in Sources */,
+				8339C2911F69BD1900C0EC63 /* Word.swift in Sources */,
 				834E21471F60A53500BC8F21 /* MainCollectionViewCell.swift in Sources */,
 				834E21111F5F5D1700BC8F21 /* MainVC.swift in Sources */,
 				834E210F1F5F5D1700BC8F21 /* AppDelegate.swift in Sources */,
 				834E21431F609EAF00BC8F21 /* User.swift in Sources */,
+				836372C21F76F35E0063625C /* WordCollectionViewCell.swift in Sources */,
 				834E213F1F609C2A00BC8F21 /* Story.swift in Sources */,
+				831F714F1F61F50100708390 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,7 +587,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -555,7 +597,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -597,7 +643,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -605,7 +653,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -637,7 +689,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = FVB4M6K923;
 				INFOPLIST_FILE = mnemmal/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = aerlindir.mnemmal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -653,7 +705,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = FVB4M6K923;
 				INFOPLIST_FILE = mnemmal/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = aerlindir.mnemmal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
