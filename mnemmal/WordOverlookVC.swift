@@ -9,21 +9,50 @@
 import UIKit
 
 class WordOverlookVC: UIViewController {
-
+    
+    var word: Word?
+    var delegate: WordDelegate?
+    
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    @IBOutlet weak var def: UITextView!
+    
+    @IBOutlet weak var examples: UITextView!
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
-    @IBAction func close(_ sender: Any) {
+    @IBOutlet weak var cancelOutlet: UIButton!
+    @IBOutlet weak var insertOutlet: UIButton!
+    
+    @IBAction func cancel(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func insert(_ sender: Any) {
+        didPress()
+        self.cancel(self)
+    }
+    
+    func didPress() {
+        delegate?.didPressButton(string: titleLabel.text!)
+        print("didPress")
+    }
+    
+    func setUpVC() {
+        titleLabel.text = word?.title
+        def.text = word?.definition
+        examples.text = self.word!.example0 + " \n" + self.word!.example1
+        cancelOutlet.layer.cornerRadius = 10.0
+        insertOutlet.layer.cornerRadius = 10.0
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setUpVC()
     }
     
-    var word: Word?
 
     /*
     // MARK: - Navigation

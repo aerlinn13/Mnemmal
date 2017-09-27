@@ -9,9 +9,9 @@
 import Foundation
 
 struct StoryInstance {
-    var id: Int
-    var userId: Int
-    var level: Int
-    var content: String
-    var likes: Int
+    let userId: String
+    let storyId:String
+    let level: Int
+    let content: String
+    let likes: Int
 }

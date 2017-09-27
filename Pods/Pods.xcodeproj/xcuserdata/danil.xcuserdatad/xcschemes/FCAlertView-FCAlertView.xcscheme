@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C7E16573A8D51E4F4DFC74EBAAB5FA41"
-               BuildableName = "Pods_mnemmal.framework"
-               BlueprintName = "Pods-mnemmal"
+               BlueprintIdentifier = "1613271357771814C71601D90B787D94"
+               BuildableName = "FCAlertView.bundle"
+               BlueprintName = "FCAlertView-FCAlertView"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C7E16573A8D51E4F4DFC74EBAAB5FA41"
-            BuildableName = "Pods_mnemmal.framework"
-            BlueprintName = "Pods-mnemmal"
+            BlueprintIdentifier = "1613271357771814C71601D90B787D94"
+            BuildableName = "FCAlertView.bundle"
+            BlueprintName = "FCAlertView-FCAlertView"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

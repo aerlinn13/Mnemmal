@@ -6,11 +6,11 @@
 //  Copyright © 2017 Danil Chernyshev. All rights reserved.
 //
 
-import Foundation
 import UIKit
+import FirebaseDatabase
 
 class SubmissionVC: UIViewController,
- UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+ UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, WordDelegate {
     
     // - MARK: Variables
     
@@ -22,15 +22,23 @@ class SubmissionVC: UIViewController,
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var headerLabel: UILabel!
     @IBAction func close(_ sender: Any) {
+        textView.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
     }
     @IBOutlet weak var closeOutlet: UIButton!
     @IBOutlet weak var dayNumber: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var submitButton: UIButton!
+    @IBAction func sumbitButtonAct(_ sender: Any) {
+        submitInstance()
+        performSegue(withIdentifier: "levelup", sender: self)
+    }
     
     var wordsPool = Array<Word>()
+    var wordsPoolBackup = Array<Word>()
     var story: Story?
+    var user: User?
 
     // - MARK: CollectionView methods
     
@@ -51,10 +59,12 @@ class SubmissionVC: UIViewController,
     }
     
     var wordToPass: Word?
+    var wordIndexPath: IndexPath?
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.wordToPass = self.wordsPool[indexPath.row]
       performSegue(withIdentifier: "wordOverlook", sender: self)
+        self.wordIndexPath = indexPath
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -89,10 +99,50 @@ class SubmissionVC: UIViewController,
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        textView.resignFirstResponder()
         if segue.identifier == "wordOverlook" {
             let nextScene =  segue.destination as! WordOverlookVC
             if let word = self.wordToPass { nextScene.word = word }
+            nextScene.delegate = self
+        } else if segue.identifier == "levelup" {
+            let nextScene = segue.destination as! LevelUpVC
+            if let story = self.story { nextScene.story = story }
         }
+    }
+    
+    func didPressButton(string:String) {
+        self.textView.text.append(" " + string)
+        self.wordsPool.remove(at: self.wordIndexPath!.row)
+        self.collectionView.deleteItems(at: [self.wordIndexPath!])
+        if wordsPool.count == 0 {
+        self.collectionView.isHidden = true
+        self.submitButton.isHidden = false
+        self.timer.invalidate()
+        }
+        textView.becomeFirstResponder()
+    }
+    
+    func submitInstance() {
+        let userId = self.user!.id!
+        let storyId = self.story!.id
+        let level = 1
+        let content = textView.text
+        let likes = 0
+        let instance = StoryInstance(userId: userId, storyId: storyId, level: level, content: content!, likes: likes)
+        let userRef = Database.database().reference().child("users/\(String(describing: userId))/stories/\(instance.storyId)/instances/").childByAutoId()
+        userRef.child("userID").setValue(userId)
+        userRef.child("StoryID").setValue(storyId)
+        userRef.child("level").setValue(level)
+        userRef.child("content").setValue(content)
+        userRef.child("likes").setValue(likes)
+        print("Instance submitted for userID: \(String(describing: userId))")
+        let genRef = Database.database().reference().child("stories/\(String(describing: storyId))/instances/").childByAutoId()
+        genRef.child("userID").setValue(userId)
+        genRef.child("StoryID").setValue(storyId)
+        genRef.child("level").setValue(level)
+        genRef.child("content").setValue(content)
+        genRef.child("likes").setValue(likes)
+        print("Instance submitted for storyID: \(String(describing: storyId))")
     }
     
     func configureHeader() {
@@ -108,6 +158,8 @@ class SubmissionVC: UIViewController,
         closeOutlet.setTitleColor(UIColor(hexString: color), for: .normal)
         dayNumber.textColor = UIColor(hexString: color)
         }
+        submitButton.isHidden = true
+        textView.becomeFirstResponder()
         }
     
     func registerNibs() {
@@ -122,10 +174,13 @@ class SubmissionVC: UIViewController,
         registerNibs()
         configureHeader()
         textView.delegate = self
-        textView.becomeFirstResponder()
         setTimer()
         print("Amount of words trasferred is " + String(wordsPool.count))
         print("Story title is " + String(describing: story?.title))
     
 }
+
+    override func viewDidAppear(_ animated: Bool) {
+        wordsPoolBackup = wordsPool
+    }
 }

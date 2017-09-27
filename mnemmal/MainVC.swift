@@ -104,6 +104,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             let nextScene =  segue.destination as! SubmissionVC
             if let wordsPool = self.wordsForStory { nextScene.wordsPool = wordsPool }
             if let story = self.storyToPass { nextScene.story = story }
+            nextScene.user = self.user
         }
     }
 
@@ -150,16 +151,16 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                 for snap in snapshots
                 {
                     let isActive = snap.childSnapshot(forPath: "isActive").value as! Bool
-                    if isActive == true {
+                    if isActive {
                     let title = snap.childSnapshot(forPath: "title").value as! String
                     print("Title of the story is " + title)
                     let daysAmount = snap.childSnapshot(forPath: "daysAmount").value as! Int
                     print("Amount of days for the story is " + String(daysAmount))
                     let id = snap.childSnapshot(forPath: "id").value as! String
                     let genre = snap.childSnapshot(forPath: "genre").value as! String
-                        let daysRef = Database.database().reference().child("users/\(String(describing: self.user.id))/stories/")
-                    var curtDay = "1"
-                    daysRef.observeSingleEvent(of: .value, with: { snapshot in
+                        // let daysRef = Database.database().reference().child("users/\(String(describing: self.user.id))/stories/")
+                    let curtDay = "1"
+                    /* daysRef.observeSingleEvent(of: .value, with: { snapshot in
                     if let crtDay = snapshot.childSnapshot(forPath: "\(id)").value as? String
                             {
                                 print(String(describing: snapshot.childSnapshot(forPath: "\(id)").key))
@@ -168,7 +169,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                             } else {
                                 print("no value for this story in users account")
                             }
-                        })
+                        }) */
                     let words = snap.childSnapshot(forPath: "words").childSnapshot(forPath: "\(curtDay)").value as! Array<String>
                     print("Words for that story are " + String(describing: words))
                     let image = snap.childSnapshot(forPath: "image").value! as! String
@@ -176,7 +177,8 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                     let titleColor = snap.childSnapshot(forPath: "titleColor").value as! String
                     let premium = snap.childSnapshot(forPath: "premium").value as! Bool
                         let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, currentDayForStory: curtDay, words: words, subtext: subtext, premium: premium, titleColor: titleColor, wordsColor: "grey", image: image, hidden: false)
-                        self.storiesForCollectionView.append(story) } else { print("story is inactive") }
+                self.storiesForCollectionView.append(story) } else { print("story is inactive") }
+                    
                     print("Amount of stories in upper CollectionView is " + String(self.storiesForCollectionView.count))
                 }
             }
@@ -187,18 +189,17 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     func retrievingUserStories() {
         print("retrieveUserStories()")
         self.user.storiesActive = []
-        let usersRef = Database.database().reference().child("users").child("\(self.user.id!)").child("stories")
+        let usersRef = Database.database().reference().child("users").child("\(self.user.id!)").child("storyRefs")
         usersRef.observeSingleEvent(of: .value, with: { snapshot in
         if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshots {
-                    let title = snap.key
-                    self.user.storiesActive!.append(title)
-                }
-            }
+        let title = snap.key
+        self.user.storiesActive!.append(title) }
+        } else { print("no user stories") }
             print("User stories are counting " + String(describing: self.user.storiesActive!.count))
             self.fetchStories()
         })
-                }
+    }
     
     func fetchStories() {
         print("fetchStories()")
@@ -256,7 +257,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func setCurrentDayForStory(_ source: String) {
-        let daysRef = Database.database().reference().child("users/\(self.user.id!)/stories/\(source)/")
+        let daysRef = Database.database().reference().child("users/\(self.user.id!)/storyRefs/\(source)/")
         daysRef.setValue("1")
         print("Day for the story has been set to 1")
     }
