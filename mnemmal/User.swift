@@ -13,4 +13,6 @@ struct User {
     var storiesActive: Array<String>?
     var status: String?
     var premiumExpires: Date?
+    var onboardingDone: Bool?
+    var wordsPerLevel: Int?
 }

@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FetchWordsAfterSubmissionDelegate {
 
     // - MARK: Variables
     
@@ -18,45 +18,45 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     @IBOutlet weak var collectionViewUp: UICollectionView!
-    
     @IBOutlet weak var collectionViewDown: UICollectionView!
-    
-    @IBOutlet weak var noStoriesLabel: UILabel!
-    
-    @IBOutlet weak var noStoriesInUp: UITextView!
+    @IBOutlet weak var emptyUp: UIImageView!
+    @IBOutlet weak var emptyDown: UIImageView!
     
     var ref: DatabaseReference!
-    
     var storiesForCollectionView = Array<Story>()
-    
     var storiesAddedSource = Array<Story>()
-    
     var user = User()
+    var currentLevelForStory: Int?
+    var storyToPass: Story?
+    var storyIndexPath: IndexPath?
     
     // - MARK: CollectionView methods
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var count = 0
         if collectionView == collectionViewUp {
-            count = storiesForCollectionView.count }
-        else { count = storiesAddedSource.count }
+                count = storiesForCollectionView.count }
+        else  { count = storiesAddedSource.count }
         return count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as! MainCollectionViewCell
         cell.scrollingImage.layer.cornerRadius = 10.0
+        cell.getButton.isHidden = true
+        cell.storySubheader.isHidden = false
+        cell.storyLabel.isHidden = false
+        
         if collectionView == collectionViewUp {
         cell.storyLabel.text = storiesForCollectionView[indexPath.row].title
         let textColor = UIColor(hexString: "\(storiesForCollectionView[indexPath.row].titleColor)")
         cell.storyLabel.textColor = textColor
         cell.storySubheader.text = String(storiesForCollectionView[indexPath.row].genre) + ", " + String(storiesForCollectionView[indexPath.row].daysAmount) + " days"
         cell.storySubheader.textColor = textColor
-        cell.storySubheader.isHidden = storiesForCollectionView[indexPath.row].hidden
         cell.scrollingImage.image = UIImage(named: "\(storiesForCollectionView[indexPath.row].image)")
-        cell.getButton.isHidden = true
         cell.getButton.addTarget(self, action: #selector(getStory), for: .touchUpInside)
         }
+        
         else {
             cell.storyLabel.text = storiesAddedSource[indexPath.row].title
             let textColor = UIColor(hexString: "\(storiesAddedSource[indexPath.row].titleColor)")
@@ -64,8 +64,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             cell.storySubheader.text = String(storiesAddedSource[indexPath.row].daysAmount) + " days"
             cell.storySubheader.textColor = textColor
             cell.scrollingImage.image = UIImage(named: "\(storiesAddedSource[indexPath.row].image)")
-            cell.storySubheader.text = String(storiesAddedSource[indexPath.row].genre) + ", day " + storiesAddedSource[indexPath.row].currentDayForStory
-            cell.getButton.isHidden = true
             }
         return cell
     }
@@ -74,8 +72,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         let size = CGSize(width: collectionView.frame.width - 20, height: 140)
             return size
     }
-    
-    var storyToPass: Story?
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == collectionViewUp {
@@ -91,33 +87,61 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                     cell.storySubheader.isHidden = false
                     cell.storyLabel.isHidden = false
                 }
-            }
-        } else {
+                }
+        }
+            
+        else {
+            print(getCurrentDate())
             self.storyToPass = self.storiesAddedSource[indexPath.row]
-            self.wordsForStory = fetchWords(indexPath)
+            print("didSelectItemAt()")
+            self.storyIndexPath = indexPath
+            if self.storiesAddedSource[indexPath.row].lastDate != getCurrentDate() {
             performSegue(withIdentifier: "submit", sender: self)
+        } else { performSegue(withIdentifier: "summary", sender: self) }
         }
     }
     
+    
+    func getCurrentDate() -> String {
+        let formatter = DateFormatter()
+        let date = Date()
+        formatter.dateFormat = "dd-MM-yyyy"
+        let stringDate: String = formatter.string(from: date)
+        return stringDate
+    }
+    
+    
+   func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView == self.collectionViewUp {
+        let indexPath = self.getIndexForVisibleCell(collectionViewUp)
+        self.collectionViewUp.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    
+    // - MARK: Data transfer
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "submit" {
             let nextScene =  segue.destination as! SubmissionVC
-            if let wordsPool = self.wordsForStory { nextScene.wordsPool = wordsPool }
-            if let story = self.storyToPass { nextScene.story = story }
+            if let story = self.storyToPass { nextScene.story = story
+                print("Prepare for segue")
+            }
+            nextScene.user = self.user
+            nextScene.fetchDelegate = self
+            if let inp = self.storyIndexPath { nextScene.storyIndexPath = inp }
+        } else if segue.identifier == "summary" {
+            let nextScene =  segue.destination as! SummaryVC
+            if let story = self.storyToPass { nextScene.story = story
+                print("Prepare for segue")
+            }
             nextScene.user = self.user
         }
     }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        if scrollView == collectionViewUp {
-            var currentCellOffset = self.collectionViewUp.contentOffset
-            currentCellOffset.x += self.collectionViewUp.frame.width / 2
-            if let indexPath = self.collectionViewUp.indexPathForItem(at: currentCellOffset) {
-                self.collectionViewUp.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-            }
-        }
-    }
     
+    
+    // - MARK: Timer and scroll of upper CollectionView
+
     var timer = Timer()
     func setTimer() {
         if self.storiesForCollectionView.count != 0 {
@@ -141,11 +165,15 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     
-    // - MARK: STORIES
+
     
+    // - MARK: Working with Stories
+    
+    // 1 Retrieve all stories and put them in upper CollectionView
     func retrievingAllStories() {
         print("retrieveAllStories()")
         let storiesRef = Database.database().reference().child("stories")
+        storiesRef.keepSynced(true)
         storiesRef.observeSingleEvent(of: .value, with: { snapshot in
             if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshots
@@ -158,27 +186,15 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                     print("Amount of days for the story is " + String(daysAmount))
                     let id = snap.childSnapshot(forPath: "id").value as! String
                     let genre = snap.childSnapshot(forPath: "genre").value as! String
-                        // let daysRef = Database.database().reference().child("users/\(String(describing: self.user.id))/stories/")
-                    let curtDay = "1"
-                    /* daysRef.observeSingleEvent(of: .value, with: { snapshot in
-                    if let crtDay = snapshot.childSnapshot(forPath: "\(id)").value as? String
-                            {
-                                print(String(describing: snapshot.childSnapshot(forPath: "\(id)").key))
-                                curtDay = crtDay
-                                print("crtDay is " + crtDay)
-                            } else {
-                                print("no value for this story in users account")
-                            }
-                        }) */
-                    let words = snap.childSnapshot(forPath: "words").childSnapshot(forPath: "\(curtDay)").value as! Array<String>
+                    let words = snap.childSnapshot(forPath: "words").value as! Array<String>
                     print("Words for that story are " + String(describing: words))
                     let image = snap.childSnapshot(forPath: "image").value! as! String
                     let subtext = snap.childSnapshot(forPath: "subtext").value! as! String
                     let titleColor = snap.childSnapshot(forPath: "titleColor").value as! String
                     let premium = snap.childSnapshot(forPath: "premium").value as! Bool
-                        let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, currentDayForStory: curtDay, words: words, subtext: subtext, premium: premium, titleColor: titleColor, wordsColor: "grey", image: image, hidden: false)
-                self.storiesForCollectionView.append(story) } else { print("story is inactive") }
-                    
+                    let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, words: words, subtext: subtext, premium: premium, titleColor: titleColor, wordsColor: "grey", image: image, hidden: false)
+                self.storiesForCollectionView.append(story)
+                    } else { print("story is inactive") }
                     print("Amount of stories in upper CollectionView is " + String(self.storiesForCollectionView.count))
                 }
             }
@@ -186,10 +202,13 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         })
     }
     
+
+    // 2 Retrieve id's of user stories.
     func retrievingUserStories() {
-        print("retrieveUserStories()")
+        print("retrievingUserStories()")
         self.user.storiesActive = []
         let usersRef = Database.database().reference().child("users").child("\(self.user.id!)").child("storyRefs")
+        usersRef.keepSynced(true)
         usersRef.observeSingleEvent(of: .value, with: { snapshot in
         if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
                 for snap in snapshots {
@@ -197,64 +216,56 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         self.user.storiesActive!.append(title) }
         } else { print("no user stories") }
             print("User stories are counting " + String(describing: self.user.storiesActive!.count))
-            self.fetchStories()
+        self.fetchStories()
         })
     }
     
+    
+    // 3 Moving stories that User has from upper to lower collectionView
     func fetchStories() {
         print("fetchStories()")
         self.storiesAddedSource = self.storiesForCollectionView.filter { self.user.storiesActive!.contains($0.id) }
         print("Stories in array to fetch counting " + String(self.storiesAddedSource.count))
         self.storiesForCollectionView = self.storiesForCollectionView.filter { !self.user.storiesActive!.contains($0.id) }
-        if self.storiesAddedSource.count != 0 {
-        let x = Array(0...(self.storiesAddedSource.count - 1))
-        print("AddedSource is " + String(describing: x))
-        for item in x {
-            loadWords(IndexPath(row: item, section: 0))
-            print("iteration number is " + String(item))
-        }
-            }
-        print("Stories for collectionViewDown is " + String(self.storiesAddedSource.count))
-        print("Stories for collectionViewUp is " + String(self.storiesForCollectionView.count))
+        print("self.storiesAddedSource.count is " + String(self.storiesAddedSource.count))
+        print("self.storiesForCollectionView.count is " + String(self.storiesForCollectionView.count))
+        loadWords()
+        getCurrentLevelsForStoriesAdded()
         self.collectionViewUp.reloadData()
         self.collectionViewDown.reloadData()
-        checkForLabelsVisibility()
-    }
+        checkVisibility()
+}
+
+
+     func getCurrentLevelsForStoriesAdded() {
+        print("getCurrentLevelsForStoriesAdded()")
+            let levelsRef = Database.database().reference().child("users/\(self.user.id!)/storyRefs/")
+            levelsRef.keepSynced(true)
+        levelsRef.observeSingleEvent(of: .value, with: { snapshot in
+            for story in self.storiesAddedSource {
+            let level = snapshot.childSnapshot(forPath: "\(story.id)").value as! String
+            story.storyLevel = level
+                print("Level for story " + story.title + " is " + String(describing: level)) }
+            })
+}
+
+
     
-    func getIndexForVisibleCell(_ collectionView: UICollectionView) -> IndexPath {
-        var visibility: IndexPath?
-        let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
-        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-        if let indexPath = collectionView.indexPathForItem(at: visiblePoint)
-        { visibility = indexPath }
-        print(visibility ?? "nil")
-        return visibility!
-    }
-    
+    // - MARK: Adding story to User
+
     @objc func getStory() {
         let visibility = self.getIndexForVisibleCell(collectionViewUp)
-        self.storiesAddedSource.insert(self.storiesForCollectionView[visibility.item], at: 0)
-        let storyRefToUpdateUserAccount = self.storiesForCollectionView[visibility.item].id
+        self.storiesAddedSource.insert(self.storiesForCollectionView[visibility.row], at: 0)
+        loadWords()
+        let storyRefToUpdateUserAccount = self.storiesForCollectionView[visibility.row].id
         self.user.storiesActive!.append(storyRefToUpdateUserAccount)
         self.collectionViewDown.insertItems(at: [IndexPath(item: 0, section: 0)])
         self.storiesForCollectionView.remove(at: visibility.item)
         self.collectionViewUp.deleteItems(at: [visibility])
-        checkForLabelsVisibility()
         setCurrentDayForStory(storyRefToUpdateUserAccount)
-        DispatchQueue.main.async {
-            self.loadWords(visibility)
-        }
+        checkVisibility()
     }
     
-    func checkForLabelsVisibility() {
-        if self.storiesAddedSource.count == 0 {
-            self.noStoriesLabel.isHidden = false
-        } else { self.noStoriesLabel.isHidden = true }
-        if self.storiesForCollectionView.count == 0 {
-            self.noStoriesInUp.isHidden = false
-            self.timer.invalidate()
-        }
-    }
     
     func setCurrentDayForStory(_ source: String) {
         let daysRef = Database.database().reference().child("users/\(self.user.id!)/storyRefs/\(source)/")
@@ -262,50 +273,130 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         print("Day for the story has been set to 1")
     }
     
+    func getIndexForVisibleCell(_ collectionView: UICollectionView) -> IndexPath {
+        let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+        let visibility = collectionView.indexPathForItem(at: visiblePoint)!
+        return visibility
+    }
+    
+    func checkVisibility() {
+        if self.storiesForCollectionView.count == 0 {
+            self.collectionViewUp.isHidden = true
+            self.emptyUp.isHidden = false
+        } else {
+            self.emptyUp.isHidden = true
+            self.collectionViewUp.isHidden = false
+        }
+        
+        if self.storiesAddedSource.count == 0 {
+            self.collectionViewDown.isHidden = true
+            self.emptyDown.isHidden = false
+        } else { self.emptyDown.isHidden = true
+            self.collectionViewDown.isHidden = false
+        }
+    }
+    
+    
+    
+    
     // - MARK: Working with WORDS for Stories
     
     var wordsPool = Array<Word>()
     
-    func loadWords(_ indexPath: IndexPath) {
-        print("loadWords()")
+    // 4 Loading words - while fetching stories
+    func loadWords() {
+        print("loadWords() is invoked")
         let wordsRef = Database.database().reference().child("words")
-        let unit = self.storiesAddedSource[indexPath.row]
-        wordsRef.observe(.value, with: { snapshot in
-                    for word in unit.words {
+        wordsRef.keepSynced(true)
+        if self.storiesAddedSource.count != 0 {
+        let x = Array(0...(self.storiesAddedSource.count - 1))
+        for item in x {
+            for word in self.storiesAddedSource[item].words {
+        wordsRef.observeSingleEvent(of: .value, with: { snapshot in
+                    let isActive = snapshot.childSnapshot(forPath: "/\(word)/isActive").value as! Bool
+                        if isActive {
                     let definition = snapshot.childSnapshot(forPath: "/\(word)/definition").value as! String
                     let example0 = snapshot.childSnapshot(forPath: "/\(word)/example0").value as! String
                     let example1 = snapshot.childSnapshot(forPath: "/\(word)/example1").value as! String
                     let id = snapshot.childSnapshot(forPath: "/\(word)/id").value as! String
                     let title = snapshot.childSnapshot(forPath: "/\(word)/title").value as! String
-                    print("Title of the word is " + title)
+                    print("loadWords() - Title of the word is " + title)
                     let type = snapshot.childSnapshot(forPath: "/\(word)/type").value as! String
                     let wordInit = Word(id: id, title: title, definition: definition, type: type, example0: example0, example1: example1)
                     if let _ = self.wordsPool.first(where: {$0.title == title}) {
                         print("word is already in the array")
                     } else {
                         self.wordsPool.append(wordInit)
-                        print("WordsPool count is " + String(self.wordsPool.count))
+                        print("loadWords() - self.wordsPool.count is " + String(self.wordsPool.count))
                     }
                 }
+
+            })
+            }
+            self.fetchWords(item)
+        }
+             }
+        }
+    
+    func getLastDateForStoryInstance(_ item: Int) {
+        let storyId = self.storiesAddedSource[item].id
+        let lastDateRef = Database.database().reference().child("users/\(self.user.id!)/stories/\(storyId)/lastDate")
+        lastDateRef.keepSynced(true)
+        lastDateRef.observeSingleEvent(of: .value, with: { snapshot in
+            print(String(describing: snapshot.value))
+            if let lastDate = snapshot.value as? String {
+                self.storiesAddedSource[item].lastDate = lastDate
+                print("last Date for Story  is  " + lastDate) }
+            else { print("No last dates for story \(self.storiesAddedSource[item].title)")}
         })
     }
     
-    var wordsForStory: Array<Word>?
-
-    func fetchWords(_ indexPath: IndexPath) -> Array<Word> {
-        let wordsNumbersForStory = self.storiesAddedSource[indexPath.row].words
-        print("Words amount that story contains is " + String(wordsNumbersForStory.count))
-        let wordsPoolForStory = self.wordsPool.filter { wordsNumbersForStory.contains($0.id) }
-        print("Words for the Story to  transfer to Submission VC is " + String(wordsPoolForStory.count))
-        return wordsPoolForStory
+    
+    // 5
+    
+    func fetchWords(_ item: Int) {
+        var wordsNumbersForStory = Array<String>()
+        var usedWords = Array<String>()
+        var wordsPoolForStory = Array<Word>()
+        print("fetchWords() is invoked")
+            print(" attempt No. \(item)")
+            wordsNumbersForStory = self.storiesAddedSource[item].words
+            let storyId = self.storiesAddedSource[item].id
+            print("fetchWords() - wordsNumbersForStory.count for story \(self.storiesAddedSource[item].title) is " + String(wordsNumbersForStory.count))
+        let wordsRef = Database.database().reference().child("users/\(self.user.id!)/stories/\(storyId)/wordUsed/")
+        wordsRef.keepSynced(true)
+        wordsRef.observeSingleEvent(of: .value, with: { snapshot in
+            if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
+                for snap in snapshots
+                {
+                let usedWord = snap.value as! String
+                    print("used word No. for story \(self.storiesAddedSource[item].title) is" + usedWord)
+                    usedWords.append(usedWord) }
+                wordsNumbersForStory = wordsNumbersForStory.filter { !usedWords.contains($0) }
+                print("fetchWords() - self.usedWords.count for story \(self.storiesAddedSource[item].title) is " + String(usedWords.count))
+                print("fetchWords() - self.wordsNumbersForStory.count for story \(self.storiesAddedSource[item].title) is " + String(wordsNumbersForStory.count))
+            }
+            wordsPoolForStory = self.wordsPool.filter { wordsNumbersForStory.contains($0.id) }
+            print("fetchWords() - self.wordsPoolForStory.count for story \(self.storiesAddedSource[item].title) is " + String(wordsPoolForStory.count))
+            let pickedWords = wordsPoolForStory.shuffled.choose(self.user.wordsPerLevel!)
+            print("fetchWords() - pickedWords.count for story \(self.storiesAddedSource[item].title) is " + String(pickedWords.count))
+            self.storiesAddedSource[item].wordsObj = pickedWords
+        })
+        self.getLastDateForStoryInstance(item)
     }
+
+    func fetchWordsAfterSubmission() {
+        loadWords()
+        getCurrentLevelsForStoriesAdded()
+    }
+    
     
     // - MARK: VC LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // setting up views
-        self.noStoriesInUp.isHidden = true
         
         // Authorization
         Auth.auth().signInAnonymously() { (user, error) in
@@ -313,16 +404,22 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         if let user = Auth.auth().currentUser {
             print("User ID is \(user.uid)")
             self.user.id = user.uid
+            self.user.wordsPerLevel = 3
         }
-        // Enabling persistent container for Database
+        
         Database.database().isPersistenceEnabled = true
-
-        // Loading stories from server
-        retrievingAllStories()
         
         // Registering nib for CollectionView
         let nib = UINib(nibName: "MainCollectionViewCell", bundle: nil)
         collectionViewUp.register(nib, forCellWithReuseIdentifier: "MainCollectionViewCell")
         collectionViewDown.register(nib, forCellWithReuseIdentifier: "MainCollectionViewCell")
+        
+        
+        // Retrieving
+        self.emptyUp.layer.cornerRadius = 10.0
+        self.emptyDown.layer.cornerRadius = 10.0
+        retrievingAllStories()
+        setTimer()
+        
     }
-    }
+}

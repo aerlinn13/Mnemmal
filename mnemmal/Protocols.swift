@@ -11,3 +11,7 @@ import UIKit
 protocol WordDelegate {
     func didPressButton(string:String)
 }
+
+protocol FetchWordsAfterSubmissionDelegate {
+    func fetchWordsAfterSubmission()
+}

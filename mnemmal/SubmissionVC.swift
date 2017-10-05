@@ -8,6 +8,7 @@
 
 import UIKit
 import FirebaseDatabase
+import CDAlertView
 
 class SubmissionVC: UIViewController,
  UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, WordDelegate {
@@ -32,24 +33,31 @@ class SubmissionVC: UIViewController,
     @IBOutlet weak var submitButton: UIButton!
     @IBAction func sumbitButtonAct(_ sender: Any) {
         submitInstance()
+        increaseStoryLevel()
+        submitWordsAsUsed()
         performSegue(withIdentifier: "levelup", sender: self)
+        fetchDelegate.fetchWordsAfterSubmission()
     }
     
-    var wordsPool = Array<Word>()
+    
     var wordsPoolBackup = Array<Word>()
     var story: Story?
     var user: User?
+    var wordsPool: Array<Word>?
+    var storyIndexPath: IndexPath?
+    var fetchDelegate: FetchWordsAfterSubmissionDelegate!
+
 
     // - MARK: CollectionView methods
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return wordsPool.count
+        return wordsPool!.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WordCollectionViewCell", for: indexPath) as! WordCollectionViewCell
-        cell.title.text = wordsPool[indexPath.row].title
-        cell.shortDef.text = wordsPool[indexPath.row].definition
+        cell.title.text = wordsPool![indexPath.row].title
+        cell.shortDef.text = wordsPool![indexPath.row].definition
         return cell
     }
     
@@ -62,7 +70,7 @@ class SubmissionVC: UIViewController,
     var wordIndexPath: IndexPath?
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.wordToPass = self.wordsPool[indexPath.row]
+        self.wordToPass = self.wordsPool?[indexPath.row]
       performSegue(withIdentifier: "wordOverlook", sender: self)
         self.wordIndexPath = indexPath
     }
@@ -77,7 +85,7 @@ class SubmissionVC: UIViewController,
     
     var timer = Timer()
     func setTimer() {
-        if self.wordsPool.count != 0 {
+        if self.wordsPool?.count != 0 {
             self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(SubmissionVC.autoScroll), userInfo: nil, repeats: true)
         }
     }
@@ -88,7 +96,7 @@ class SubmissionVC: UIViewController,
     
     var x = 1
     @objc func autoScroll() {
-        if self.x < self.wordsPool.count {
+        if self.x < self.wordsPool!.count {
             let indexPath = IndexPath(item: x, section: 0)
             self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
             self.x = self.x + 1
@@ -112,15 +120,21 @@ class SubmissionVC: UIViewController,
     
     func didPressButton(string:String) {
         self.textView.text.append(" " + string)
-        self.wordsPool.remove(at: self.wordIndexPath!.row)
+        self.wordsPool!.remove(at: self.wordIndexPath!.row)
         self.collectionView.deleteItems(at: [self.wordIndexPath!])
-        if wordsPool.count == 0 {
+        if wordsPool!.count == 0 {
         self.collectionView.isHidden = true
         self.submitButton.isHidden = false
         self.timer.invalidate()
         }
-        textView.becomeFirstResponder()
+        self.textView.becomeFirstResponder()
     }
+    
+    
+    
+    
+    
+    // - MARK: Actions on Submit button
     
     func submitInstance() {
         let userId = self.user!.id!
@@ -142,7 +156,35 @@ class SubmissionVC: UIViewController,
         genRef.child("level").setValue(level)
         genRef.child("content").setValue(content)
         genRef.child("likes").setValue(likes)
+        let userRefForDate = Database.database().reference().child("users/\(String(describing: userId))/stories/\(instance.storyId)/lastDate")
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let date = Date()
+        let stringDate = dateFormatter.string(from: date)
+        userRefForDate.setValue("\(stringDate)")
         print("Instance submitted for storyID: \(String(describing: storyId))")
+    }
+    
+    func increaseStoryLevel() {
+        let daysRef = Database.database().reference().child("users/\(self.user!.id!)/storyRefs/\(self.story!.id)/")
+        let storylvl = Int(self.story!.storyLevel)!
+        if storylvl < self.story!.daysAmount {
+        let level = storylvl + 1
+        let lvl = String(describing: level)
+        daysRef.setValue("\(lvl)")
+            print("Level for the story \(self.story!.title) has been set to \(lvl)") }
+        else {
+            print("DaysAmount limit (\(storylvl) days) is reached. Story is to be deleted from user account.")
+        }
+    }
+    
+    func submitWordsAsUsed() {
+        print("submitWordsAsUsed() is invoked")
+        let wordsRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(self.story!.id)/wordUsed/")
+        for word in self.wordsPoolBackup {
+            wordsRef.child("\(word.id)").setValue("\(word.id)")
+            print("Word \(word.title) has been set as used for story \(self.story!.title)")
+        }
     }
     
     func configureHeader() {
@@ -150,8 +192,8 @@ class SubmissionVC: UIViewController,
             bgImage.image = UIImage(named: image) }
         if let title = story?.title {
             headerLabel.text = title }
-        if let dayNum = story?.currentDayForStory {
-            dayNumber.text = "Day " + dayNum
+        if let dayNum = story?.storyLevel {
+            dayNumber.text = "Day " + String(describing: dayNum)
         }
         if let color = story?.titleColor {
             headerLabel.textColor = UIColor(hexString: color)
@@ -159,8 +201,17 @@ class SubmissionVC: UIViewController,
         dayNumber.textColor = UIColor(hexString: color)
         }
         submitButton.isHidden = true
-        textView.becomeFirstResponder()
+    }
+
+    func configurePopup() {
+        if popupAppeared == false {
+        let alert = CDAlertView(title: "I am good", message: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).", type: .custom(image: UIImage(named: "1")!))
+        alert.alertBackgroundColor = UIColor(red: 248/255.0, green: 236/255.0, blue: 194/255.0, alpha: 1)
+        alert.circleFillColor = UIColor(red: 248/255.0, green: 236/255.0, blue: 194/255.0, alpha: 1)
+            alert.show()
+            popupAppeared = true
         }
+    }
     
     func registerNibs() {
         let nib0 = UINib(nibName: "SubtextCollectionViewCell", bundle: nil)
@@ -169,18 +220,21 @@ class SubmissionVC: UIViewController,
         collectionView.register(nib1, forCellWithReuseIdentifier: "WordCollectionViewCell")
     }
     
+    var popupAppeared = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        wordsPoolBackup = story!.wordsObj!
+        wordsPool = wordsPoolBackup
         registerNibs()
         configureHeader()
         textView.delegate = self
         setTimer()
-        print("Amount of words trasferred is " + String(wordsPool.count))
-        print("Story title is " + String(describing: story?.title))
-    
+        print("Amount of words trasferred is " + String(wordsPool!.count))
+        print("Story title is " + String(describing: story!.title))
+        print("Current level for Story transferred to VC is " + String(describing: story!.storyLevel))
 }
-
     override func viewDidAppear(_ animated: Bool) {
-        wordsPoolBackup = wordsPool
+        configurePopup()
     }
 }

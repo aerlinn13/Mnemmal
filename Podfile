@@ -9,7 +9,7 @@ target 'mnemmal' do
 pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
-pod 'FCAlertView'
+pod "CDAlertView"
 
   target 'mnemmalTests' do
     inherit! :search_paths

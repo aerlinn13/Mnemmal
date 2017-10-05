@@ -4,12 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>FCAlertView-FCAlertView.xcscheme</key>
+		<key>CDAlertView-CDAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FCAlertView.xcscheme</key>
+		<key>CDAlertView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -35,6 +35,11 @@
 			<false/>
 		</dict>
 		<key>Pods-mnemmalUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>leveldb-library.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
