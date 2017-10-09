@@ -6,9 +6,13 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -22,51 +26,78 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RedHat" translatesAutoresizingMaskIntoConstraints="NO" id="w6J-Kj-emB">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyi-5g-Ae9">
-                        <rect key="frame" x="190" y="57" width="10" height="26"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q4e-BI-Dd4">
-                        <rect key="frame" x="111" y="90" width="167" height="20"/>
-                        <constraints>
-                            <constraint firstAttribute="width" secondItem="Q4e-BI-Dd4" secondAttribute="height" multiplier="117:14" id="WLv-a3-abj"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
-                        <nil key="textColor"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyi-5g-Ae9">
+                        <rect key="frame" x="190.33333333333337" y="57" width="9.6666666666666572" height="27"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mAJ-JK-a99">
-                        <rect key="frame" x="153" y="28" width="85" height="85"/>
+                        <rect key="frame" x="319" y="99" width="60" height="25"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="85" id="Pme-xJ-eJP"/>
-                            <constraint firstAttribute="width" constant="85" id="bDe-4X-hCF"/>
+                            <constraint firstAttribute="width" constant="60" id="CZF-Vu-xLp"/>
+                            <constraint firstAttribute="height" constant="25" id="NTK-nR-QSq"/>
                         </constraints>
+                        <state key="normal" image="getButton"/>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Premium story" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zb-6R-xwR">
+                        <rect key="frame" x="320" y="126" width="58" height="8"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="8" id="bZO-1O-fd2"/>
+                            <constraint firstAttribute="width" constant="58" id="d9T-U4-NnC"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="8"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DayNum" translatesAutoresizingMaskIntoConstraints="NO" id="Kb5-If-f7l">
+                        <rect key="frame" x="318" y="103" width="60" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="Nem-Ff-c7p"/>
+                            <constraint firstAttribute="height" constant="25" id="fAT-MP-LuN"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAY 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pCZ-03-V47">
+                        <rect key="frame" x="327" y="105" width="43" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="21" id="E1g-Lx-Vh4"/>
+                            <constraint firstAttribute="width" constant="43" id="veR-vY-uAN"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                        <color key="textColor" red="1" green="0.083710401147374158" blue="0.091443830810419291" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="Q4e-BI-Dd4" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="7fp-iU-zk1"/>
-                <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="CpG-f9-Ys3"/>
-                <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="M7D-V4-Pg0"/>
+                <constraint firstAttribute="bottom" secondItem="Kb5-If-f7l" secondAttribute="bottom" constant="12" id="2nI-Wg-dnq"/>
+                <constraint firstAttribute="trailing" secondItem="pCZ-03-V47" secondAttribute="trailing" constant="20" id="BKw-jN-eNk"/>
+                <constraint firstItem="3Zb-6R-xwR" firstAttribute="top" secondItem="pCZ-03-V47" secondAttribute="bottom" id="EnK-rA-gCq"/>
+                <constraint firstAttribute="trailing" secondItem="3Zb-6R-xwR" secondAttribute="trailing" constant="12" id="I9w-tD-XLz"/>
+                <constraint firstAttribute="trailing" secondItem="mAJ-JK-a99" secondAttribute="trailing" constant="11" id="Lkr-pl-4Ep"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Obt-l5-mcI"/>
                 <constraint firstAttribute="trailing" secondItem="w6J-Kj-emB" secondAttribute="trailing" id="TiJ-uy-ri0"/>
-                <constraint firstItem="mAJ-JK-a99" firstAttribute="centerX" secondItem="cyi-5g-Ae9" secondAttribute="centerX" id="e4S-Y5-SZq"/>
+                <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Vcf-Pd-MM9"/>
+                <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="bkn-ST-XMl"/>
                 <constraint firstAttribute="bottom" secondItem="w6J-Kj-emB" secondAttribute="bottom" id="fX6-QG-asW"/>
+                <constraint firstAttribute="bottom" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="16" id="kFm-b9-yiw"/>
+                <constraint firstAttribute="trailing" secondItem="Kb5-If-f7l" secondAttribute="trailing" constant="12" id="kHT-m9-p4B"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="o6U-mF-C5H"/>
-                <constraint firstItem="Q4e-BI-Dd4" firstAttribute="top" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="-23" id="pt1-CZ-sCb"/>
-                <constraint firstAttribute="bottom" secondItem="Q4e-BI-Dd4" secondAttribute="bottom" constant="30.333333333333329" id="y20-DM-nOY"/>
+                <constraint firstItem="3Zb-6R-xwR" firstAttribute="top" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="2" id="pVq-MR-pq9"/>
             </constraints>
             <connections>
+                <outlet property="dayNumBG" destination="Kb5-If-f7l" id="5Qf-OG-byx"/>
+                <outlet property="dayNumLabel" destination="pCZ-03-V47" id="GPT-Ng-Jef"/>
                 <outlet property="getButton" destination="mAJ-JK-a99" id="CHL-i1-gE5"/>
+                <outlet property="premium" destination="3Zb-6R-xwR" id="SkS-xE-U1F"/>
                 <outlet property="scrollingImage" destination="w6J-Kj-emB" id="E4h-zC-TZn"/>
                 <outlet property="storyLabel" destination="cyi-5g-Ae9" id="9zu-O7-Yoi"/>
-                <outlet property="storySubheader" destination="Q4e-BI-Dd4" id="gug-Ve-lo9"/>
             </connections>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="DayNum" width="60" height="25"/>
         <image name="RedHat" width="390" height="140"/>
+        <image name="getButton" width="60" height="25"/>
     </resources>
 </document>

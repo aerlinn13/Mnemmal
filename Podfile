@@ -13,7 +13,7 @@ pod "CDAlertView"
 pod "FacebookCore"
 pod "FacebookLogin"
 pod 'SideMenu'
-
+pod "BouncyLayout"
   target 'mnemmalTests' do
     inherit! :search_paths
     # Pods for testing

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5CF4B4C16588A567190186D980D8F66B"
-               BuildableName = "Pods_mnemmal.framework"
-               BlueprintName = "Pods-mnemmal"
+               BlueprintIdentifier = "596E2BF0D45B6D6BBF2898BEBD5295DD"
+               BuildableName = "BouncyLayout.framework"
+               BlueprintName = "BouncyLayout"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5CF4B4C16588A567190186D980D8F66B"
-            BuildableName = "Pods_mnemmal.framework"
-            BlueprintName = "Pods-mnemmal"
+            BlueprintIdentifier = "596E2BF0D45B6D6BBF2898BEBD5295DD"
+            BuildableName = "BouncyLayout.framework"
+            BlueprintName = "BouncyLayout"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

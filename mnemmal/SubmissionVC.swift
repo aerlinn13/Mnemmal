@@ -27,7 +27,6 @@ class SubmissionVC: UIViewController,
         self.dismiss(animated: true, completion: nil)
     }
     @IBOutlet weak var closeOutlet: UIButton!
-    @IBOutlet weak var dayNumber: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     @IBOutlet weak var submitButton: UIButton!
@@ -36,7 +35,7 @@ class SubmissionVC: UIViewController,
         increaseStoryLevel()
         submitWordsAsUsed()
         performSegue(withIdentifier: "levelup", sender: self)
-        fetchDelegate.fetchWordsAfterSubmission()
+        fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, indexPath: self.storyIndexPath!)
     }
     
     
@@ -205,6 +204,7 @@ class SubmissionVC: UIViewController,
         let daysRef = Database.database().reference().child("users/\(self.user!.id!)/storyRefs/\(self.story!.id)/")
         let storylvl = Int(self.story!.storyLevel)!
         if storylvl < self.story!.daysAmount {
+        self.story?.storyLevel = String(describing: Int(self.story!.storyLevel)! + 1)
         let level = storylvl + 1
         let lvl = String(describing: level)
         daysRef.setValue("\(lvl)")
@@ -226,15 +226,8 @@ class SubmissionVC: UIViewController,
     func configureHeader() {
         if let image = story?.image {
             bgImage.image = UIImage(named: image) }
-        if let title = story?.title {
-            headerLabel.text = title }
-        if let dayNum = story?.storyLevel {
-            dayNumber.text = "Day " + String(describing: dayNum)
-        }
         if let color = story?.titleColor {
             headerLabel.textColor = UIColor(hexString: color)
-        closeOutlet.setTitleColor(UIColor(hexString: color), for: .normal)
-        dayNumber.textColor = UIColor(hexString: color)
         }
         submitButton.isHidden = true
         textView.text = "War never changes..."

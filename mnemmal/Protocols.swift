@@ -13,5 +13,5 @@ protocol WordDelegate {
 }
 
 protocol FetchWordsAfterSubmissionDelegate {
-    func fetchWordsAfterSubmission()
+    func fetchWordsAfterSubmission(storyLevel: String, indexPath: IndexPath)
 }

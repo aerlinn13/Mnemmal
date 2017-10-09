@@ -14,9 +14,13 @@ class MainCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var storyLabel: UILabel!
     
-    @IBOutlet weak var storySubheader: UILabel!
+    @IBOutlet weak var premium: UILabel!
     
     @IBOutlet weak var getButton: UIButton!
+    
+    @IBOutlet weak var dayNumLabel: UILabel!
+    
+    @IBOutlet weak var dayNumBG: UIImageView!
     
     
     

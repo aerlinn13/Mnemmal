@@ -5,6 +5,7 @@ PODS:
   - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
   - Bolts/Tasks (1.8.4)
+  - BouncyLayout (2.0.0)
   - CDAlertView (0.6.1)
   - FacebookCore (0.2.0):
     - Bolts (~> 1.8)
@@ -66,6 +67,7 @@ PODS:
   - SideMenu (3.0.2)
 
 DEPENDENCIES:
+  - BouncyLayout
   - CDAlertView
   - FacebookCore
   - FacebookLogin
@@ -76,6 +78,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  BouncyLayout: f64872d6b2a3e41bb8c89e24d0ff08e2dbeeb304
   CDAlertView: cbb016e839ea49cddba06a78eebc2ac7978fba06
   FacebookCore: 2cb3f0fbff218e9d3119cec84bae983b232412de
   FacebookLogin: c9d606504735780a9e3002465a615512e0a691a5
@@ -93,6 +96,6 @@ SPEC CHECKSUMS:
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
   SideMenu: 8fe957e0f5dcf1a1175c8ba5d47978d4eb2a89da
 
-PODFILE CHECKSUM: 55ebcbe1a28c8a10666d512726418158a163186c
+PODFILE CHECKSUM: 50995911e50d068a87dfe025efd12baa0af89963
 
 COCOAPODS: 1.3.1

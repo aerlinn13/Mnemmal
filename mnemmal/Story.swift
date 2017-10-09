@@ -24,6 +24,7 @@ class Story {
     var storyLevel = "1"
     var wordsObj: Array<Word>?
     var lastDate: String?
+    var newDay: Bool?
     
     init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, premium: Bool, titleColor: String, wordsColor: String, image: String, hidden: Bool) {
         self.isActive = isActive

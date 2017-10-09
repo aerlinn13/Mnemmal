@@ -11,6 +11,7 @@ import Firebase
 import FacebookCore
 import FacebookLogin
 import SideMenu
+import BouncyLayout
 
 class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FetchWordsAfterSubmissionDelegate {
 
@@ -27,8 +28,11 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
 
     @IBOutlet weak var emptyUp: UIButton!
     @IBAction func EmptyUpAction(_ sender: Any) {
+        sendEmail()
     }
 
+    @IBOutlet weak var emptyUpLabel: UILabel!
+    @IBOutlet weak var emptyDownLabel: UILabel!
     
     
     // var ref: DatabaseReference!
@@ -52,33 +56,37 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as! MainCollectionViewCell
         cell.scrollingImage.layer.cornerRadius = 10.0
-        cell.getButton.isHidden = true
-        cell.storySubheader.isHidden = false
         cell.storyLabel.isHidden = false
         
         if collectionView == collectionViewUp {
+        cell.dayNumLabel.isHidden = true
+        cell.dayNumBG.isHidden = true
         cell.storyLabel.text = storiesForCollectionView[indexPath.row].title
         let textColor = UIColor(hexString: "\(storiesForCollectionView[indexPath.row].titleColor)")
         cell.storyLabel.textColor = textColor
-        cell.storySubheader.text = String(storiesForCollectionView[indexPath.row].genre) + ", " + String(storiesForCollectionView[indexPath.row].daysAmount) + " days"
-        cell.storySubheader.textColor = textColor
         cell.scrollingImage.image = UIImage(named: "\(storiesForCollectionView[indexPath.row].image)")
-        if storiesForCollectionView[indexPath.row].premium == true && self.user.status == "basic" {
-            cell.getButton.setImage(UIImage(named: "PremiumButton"), for: .normal)
-                    } else {
-                    cell.getButton.setImage(UIImage(named: "getButton"), for: .normal)
-                    cell.getButton.isUserInteractionEnabled = true
-            }
         cell.getButton.addTarget(self, action: #selector(MainVC.getStory), for: .touchUpInside)
-        }
+        if storiesForCollectionView[indexPath.row].premium == true {
+            cell.premium.isHidden = false } else {
+            cell.premium.text = "for free"
+            }
+    }
         else {
+            cell.premium.isHidden = true
+            cell.getButton.isHidden = true
             cell.storyLabel.text = storiesAddedSource[indexPath.row].title
             let textColor = UIColor(hexString: "\(storiesAddedSource[indexPath.row].titleColor)")
             cell.storyLabel.textColor = textColor
-            cell.storySubheader.text = String(storiesAddedSource[indexPath.row].daysAmount) + " days"
-            cell.storySubheader.textColor = textColor
+            print(storiesAddedSource[indexPath.row].storyLevel + "this is storyLevel")
             cell.scrollingImage.image = UIImage(named: "\(storiesAddedSource[indexPath.row].image)")
+            cell.dayNumLabel.text = "DAY " + storiesAddedSource[indexPath.row].storyLevel
+            if self.storiesAddedSource[indexPath.row].lastDate != getCurrentDate() {
+                cell.dayNumLabel.textColor = UIColor(red: 0/255.0, green: 180/255.0, blue: 0/255.0, alpha: 1)
+                self.storiesAddedSource[indexPath.row].newDay = true
+            } else {
+                cell.dayNumLabel.textColor = UIColor.lightGray
             }
+    }
         return cell
     }
     
@@ -89,21 +97,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == collectionViewUp {
-            if let cell = self.collectionViewUp.cellForItem(at: indexPath) as? MainCollectionViewCell {
-                if cell.getButton.isHidden == true {
-                    cell.getButton.isHidden = false
-                    cell.storySubheader.isHidden = true
-                    cell.storyLabel.isHidden = true
-                    self.timer.invalidate()
-                }
-                else {
-                    cell.getButton.isHidden = true
-                    cell.storySubheader.isHidden = false
-                    cell.storyLabel.isHidden = false
-                }
-                }
         }
-            
         else {
             print(getCurrentDate())
             self.storyToPass = self.storiesAddedSource[indexPath.row]
@@ -127,8 +121,8 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView == self.collectionViewUp {
-        let indexPath = self.getIndexForVisibleCell(collectionViewUp)
-        self.collectionViewUp.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            if let indexPath = self.getIndexForVisibleCell(collectionViewUp) {
+                self.collectionViewUp.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true) }
         }
     }
     
@@ -248,6 +242,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         self.collectionViewUp.reloadData()
         self.collectionViewDown.reloadData()
         checkVisibility()
+        setTimer()
 }
 
 
@@ -260,6 +255,8 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             let level = snapshot.childSnapshot(forPath: "\(story.id)").value as! String
             story.storyLevel = level
                 print("Level for story " + story.title + " is " + String(describing: level)) }
+            self.storiesAddedSource = self.storiesAddedSource.sorted(by: { $0.storyLevel < $1.storyLevel })
+            self.collectionViewDown.reloadData()
             })
 }
 
@@ -268,16 +265,18 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     // - MARK: Adding story to User
 
     @objc func getStory() {
-        let visibility = self.getIndexForVisibleCell(collectionViewUp)
+        if let visibility = self.getIndexForVisibleCell(collectionViewUp) {
         self.storiesAddedSource.insert(self.storiesForCollectionView[visibility.row], at: 0)
         loadWords()
         let storyRefToUpdateUserAccount = self.storiesForCollectionView[visibility.row].id
         self.user.storiesActive!.append(storyRefToUpdateUserAccount)
         self.collectionViewDown.insertItems(at: [IndexPath(item: 0, section: 0)])
         self.storiesForCollectionView.remove(at: visibility.item)
+        if self.storiesForCollectionView.count == 0 { self.stopTimer() }
         self.collectionViewUp.deleteItems(at: [visibility])
         setCurrentDayForStory(storyRefToUpdateUserAccount)
         checkVisibility()
+        }
     }
     
     
@@ -287,26 +286,32 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         print("Day for the story has been set to 1")
     }
     
-    func getIndexForVisibleCell(_ collectionView: UICollectionView) -> IndexPath {
+    func getIndexForVisibleCell(_ collectionView: UICollectionView) -> IndexPath? {
         let visibleRect = CGRect(origin: collectionView.contentOffset, size: collectionView.bounds.size)
         let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
-        let visibility = collectionView.indexPathForItem(at: visiblePoint)!
+        let visibility = collectionView.indexPathForItem(at: visiblePoint)
         return visibility
+
     }
     
     func checkVisibility() {
         if self.storiesForCollectionView.count == 0 {
             self.collectionViewUp.isHidden = true
             self.emptyUp.isHidden = false
+            self.emptyUpLabel.isHidden = false
         } else {
             self.emptyUp.isHidden = true
+            self.emptyUpLabel.isHidden = true
             self.collectionViewUp.isHidden = false
         }
         
         if self.storiesAddedSource.count == 0 {
             self.collectionViewDown.isHidden = true
             self.emptyDown.isHidden = false
-        } else { self.emptyDown.isHidden = true
+            self.emptyDownLabel.isHidden = false
+        } else {
+            self.emptyDown.isHidden = true
+            self.emptyDownLabel.isHidden = true
             self.collectionViewDown.isHidden = false
         }
     }
@@ -398,9 +403,11 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             self.storiesAddedSource[item].wordsObj = pickedWords
         })
         self.getLastDateForStoryInstance(item)
+        
     }
 
-    func fetchWordsAfterSubmission() {
+    func fetchWordsAfterSubmission(storyLevel: String, indexPath: IndexPath) {
+        self.storiesAddedSource[indexPath.row].storyLevel = storyLevel
         loadWords()
         getCurrentLevelsForStoriesAdded()
     }
@@ -434,9 +441,20 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         SideMenuManager.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
         SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
         }
-        // Enable gestures. The left and/or right menus must be set up above for these to work.
-        // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
     
+    func sendEmail() {
+        let subject = "About Mnemmal app"
+        let body = ""
+        let coded = "mailto:danil@chernyshev.pro?subject=\(subject)&body=\(body)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        
+        if let emailURL:NSURL = NSURL(string: coded!)
+        {
+            if UIApplication.shared.canOpenURL(emailURL as URL)
+            {
+                UIApplication.shared.openURL(emailURL as URL)
+            }
+    }
+    }
         
     // - MARK: VC LifeCycle
 
@@ -464,12 +482,13 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         self.emptyUp.layer.cornerRadius = 10.0
         self.emptyDown.layer.cornerRadius = 10.0
         retrievingAllStories()
-        setTimer()
         
         // Facebook Login
         self.emptyDown.addTarget(self, action: #selector(MainVC.loginButtonClicked), for: .touchUpInside)
 
         // SideMenu
         setupSideMenu()
+        
+        // BouncyLayout
     }
 }

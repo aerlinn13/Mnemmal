@@ -10,13 +10,9 @@ import UIKit
 import SideMenu
 
 class SideMenuVC: UIViewController {
-
-    @IBOutlet weak var profileImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        profileImage.image = profileImage.image?.circleMasked
-
 
     }
 
