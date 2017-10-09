@@ -10,6 +10,7 @@
 		1FF9A33651DFC6A07355E73D /* Pods_mnemmal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E1CFC409A9A79240A122C454 /* Pods_mnemmal.framework */; };
 		6F308A3E3C997C1C54FF27F5 /* Pods_mnemmalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2675D6EEC436E5B4CE15D8A2 /* Pods_mnemmalTests.framework */; };
 		831F714F1F61F50100708390 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831F714E1F61F50100708390 /* Extensions.swift */; };
+		8334CDA81F8911B900A2A020 /* SideMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8334CDA71F8911B900A2A020 /* SideMenuVC.swift */; };
 		8339C2911F69BD1900C0EC63 /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8339C2901F69BD1800C0EC63 /* Word.swift */; };
 		834599891F7BADEF00010827 /* LevelUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834599881F7BADEF00010827 /* LevelUpVC.swift */; };
 		83492A641F7CF9D400CEB4E5 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83492A631F7CF9D400CEB4E5 /* TableViewCell.swift */; };
@@ -64,6 +65,9 @@
 		61E6673C5271A2497F9481FA /* Pods-mnemmalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mnemmalTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-mnemmalTests/Pods-mnemmalTests.release.xcconfig"; sourceTree = "<group>"; };
 		7809340EF58C66DA76817E1C /* Pods-mnemmalUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mnemmalUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-mnemmalUITests/Pods-mnemmalUITests.release.xcconfig"; sourceTree = "<group>"; };
 		831F714E1F61F50100708390 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		8334CD981F879BF800A2A020 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		8334CD991F879BFA00A2A020 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		8334CDA71F8911B900A2A020 /* SideMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuVC.swift; sourceTree = "<group>"; };
 		8339C2901F69BD1800C0EC63 /* Word.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
 		834599881F7BADEF00010827 /* LevelUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelUpVC.swift; sourceTree = "<group>"; };
 		83492A631F7CF9D400CEB4E5 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TableViewCell.swift; path = /Users/danil/Documents/Mnemmal/mnemmal/TableViewCell.swift; sourceTree = "<absolute>"; };
@@ -159,6 +163,7 @@
 				839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */,
 				834599881F7BADEF00010827 /* LevelUpVC.swift */,
 				8354DC171F8396CC00DC1C87 /* SummaryVC.swift */,
+				8334CDA71F8911B900A2A020 /* SideMenuVC.swift */,
 				83FD36F91F7AF11300EF266D /* Protocols.swift */,
 				831F714E1F61F50100708390 /* Extensions.swift */,
 				839193061F741A45009A2069 /* CollectionCells */,
@@ -231,6 +236,8 @@
 		F6D7A0B48E292BE103CD7345 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8334CD991F879BFA00A2A020 /* FBSDKCoreKit.framework */,
+				8334CD981F879BF800A2A020 /* FBSDKLoginKit.framework */,
 				E1CFC409A9A79240A122C454 /* Pods_mnemmal.framework */,
 				2675D6EEC436E5B4CE15D8A2 /* Pods_mnemmalTests.framework */,
 				E43710402DC410FAAF5C4926 /* Pods_mnemmalUITests.framework */,
@@ -421,13 +428,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mnemmalTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		A645A2ED170FAA6C1F779DAF /* [CP] Copy Pods Resources */ = {
@@ -451,13 +461,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mnemmalUITests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CD81CCD2D15E7F1D578ECAA3 /* [CP] Check Pods Manifest.lock */ = {
@@ -466,13 +479,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-mnemmal-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		F28F8D5149BC1EB9DAC9B2DE /* [CP] Embed Pods Frameworks */ = {
@@ -496,9 +512,32 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-mnemmal/Pods-mnemmal-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/CDAlertView/CDAlertView.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/SideMenu/SideMenu.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CDAlertView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SideMenu.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -529,6 +568,7 @@
 			files = (
 				836372BE1F76F3070063625C /* SubtextCollectionViewCell.swift in Sources */,
 				8354DC181F8396CC00DC1C87 /* SummaryVC.swift in Sources */,
+				8334CDA81F8911B900A2A020 /* SideMenuVC.swift in Sources */,
 				83F18A9D1F6E79A400981A72 /* SubmissionVC.swift in Sources */,
 				834599891F7BADEF00010827 /* LevelUpVC.swift in Sources */,
 				839B41361F7A9A6A003B2B00 /* WordOverlookVC.swift in Sources */,
@@ -724,6 +764,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = FVB4M6K923;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/CDAlertView\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMSessionFetcher\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GoogleToolboxForMac\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/leveldb-library\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/nanopb\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"/Users/$(USER)/Documents/FacebookSDK",
+				);
 				INFOPLIST_FILE = mnemmal/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -8,6 +8,9 @@
 
 import UIKit
 import Firebase
+import FacebookCore
+import FacebookLogin
+import SideMenu
 
 class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FetchWordsAfterSubmissionDelegate {
 
@@ -19,10 +22,16 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     
     @IBOutlet weak var collectionViewUp: UICollectionView!
     @IBOutlet weak var collectionViewDown: UICollectionView!
-    @IBOutlet weak var emptyUp: UIImageView!
-    @IBOutlet weak var emptyDown: UIImageView!
     
-    var ref: DatabaseReference!
+    @IBOutlet weak var emptyDown: UIButton!
+
+    @IBOutlet weak var emptyUp: UIButton!
+    @IBAction func EmptyUpAction(_ sender: Any) {
+    }
+
+    
+    
+    // var ref: DatabaseReference!
     var storiesForCollectionView = Array<Story>()
     var storiesAddedSource = Array<Story>()
     var user = User()
@@ -54,9 +63,14 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         cell.storySubheader.text = String(storiesForCollectionView[indexPath.row].genre) + ", " + String(storiesForCollectionView[indexPath.row].daysAmount) + " days"
         cell.storySubheader.textColor = textColor
         cell.scrollingImage.image = UIImage(named: "\(storiesForCollectionView[indexPath.row].image)")
-        cell.getButton.addTarget(self, action: #selector(getStory), for: .touchUpInside)
+        if storiesForCollectionView[indexPath.row].premium == true && self.user.status == "basic" {
+            cell.getButton.setImage(UIImage(named: "PremiumButton"), for: .normal)
+                    } else {
+                    cell.getButton.setImage(UIImage(named: "getButton"), for: .normal)
+                    cell.getButton.isUserInteractionEnabled = true
+            }
+        cell.getButton.addTarget(self, action: #selector(MainVC.getStory), for: .touchUpInside)
         }
-        
         else {
             cell.storyLabel.text = storiesAddedSource[indexPath.row].title
             let textColor = UIColor(hexString: "\(storiesAddedSource[indexPath.row].titleColor)")
@@ -391,12 +405,43 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         getCurrentLevelsForStoriesAdded()
     }
     
+    func facebookSignIn() {
+        let credential = FacebookAuthProvider.credential(withAccessToken: (AccessToken.current?.authenticationToken)!)
+        Auth.auth().currentUser?.link(with: credential) { (user, error) in
+            self.retrievingAllStories()
+            print("Facebook User logged in!")
+        }
+    }
     
+    @objc func loginButtonClicked() {
+        let loginManager = LoginManager()
+        loginManager.logIn([ .publicProfile ], viewController: self) { loginResult in
+            switch loginResult {
+            case .failed(let error):
+                print(error)
+            case .cancelled:
+                print("User cancelled login.")
+            case .success(let grantedPermissions, let declinedPermissions, let accessToken):
+                print("Logged in!")
+            }
+        }
+    }
+    
+     func setupSideMenu() {
+        let menuLeftNavigationController = storyboard!.instantiateViewController(withIdentifier: "LeftMenuNavigationController") as! UISideMenuNavigationController
+        menuLeftNavigationController.leftSide = true
+        SideMenuManager.menuLeftNavigationController = menuLeftNavigationController
+        SideMenuManager.menuAddPanGestureToPresent(toView: self.navigationController!.navigationBar)
+        SideMenuManager.menuAddScreenEdgePanGesturesToPresent(toView: self.navigationController!.view)
+        }
+        // Enable gestures. The left and/or right menus must be set up above for these to work.
+        // Note that these continue to work on the Navigation Controller independent of the View Controller it displays!
+    
+        
     // - MARK: VC LifeCycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // setting up views
         
         // Authorization
         Auth.auth().signInAnonymously() { (user, error) in
@@ -421,5 +466,10 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         retrievingAllStories()
         setTimer()
         
+        // Facebook Login
+        self.emptyDown.addTarget(self, action: #selector(MainVC.loginButtonClicked), for: .touchUpInside)
+
+        // SideMenu
+        setupSideMenu()
     }
 }

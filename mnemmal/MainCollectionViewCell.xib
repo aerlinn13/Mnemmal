@@ -23,17 +23,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyi-5g-Ae9">
-                        <rect key="frame" x="190.66666666666666" y="57.666666666666657" width="10" height="26.333333333333343"/>
+                        <rect key="frame" x="190" y="57" width="10" height="26"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="22"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mAJ-JK-a99">
-                        <rect key="frame" x="176.66666666666666" y="51" width="38" height="38"/>
-                        <state key="normal" image="getButton"/>
-                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q4e-BI-Dd4">
-                        <rect key="frame" x="111.66666666666669" y="90" width="167" height="20"/>
+                        <rect key="frame" x="111" y="90" width="167" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Q4e-BI-Dd4" secondAttribute="height" multiplier="117:14" id="WLv-a3-abj"/>
                         </constraints>
@@ -41,18 +37,25 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mAJ-JK-a99">
+                        <rect key="frame" x="153" y="28" width="85" height="85"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="85" id="Pme-xJ-eJP"/>
+                            <constraint firstAttribute="width" constant="85" id="bDe-4X-hCF"/>
+                        </constraints>
+                    </button>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstItem="Q4e-BI-Dd4" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="7fp-iU-zk1"/>
                 <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="CpG-f9-Ys3"/>
-                <constraint firstItem="mAJ-JK-a99" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="EHg-fv-sFu"/>
                 <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="M7D-V4-Pg0"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Obt-l5-mcI"/>
                 <constraint firstAttribute="trailing" secondItem="w6J-Kj-emB" secondAttribute="trailing" id="TiJ-uy-ri0"/>
+                <constraint firstItem="mAJ-JK-a99" firstAttribute="centerX" secondItem="cyi-5g-Ae9" secondAttribute="centerX" id="e4S-Y5-SZq"/>
                 <constraint firstAttribute="bottom" secondItem="w6J-Kj-emB" secondAttribute="bottom" id="fX6-QG-asW"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="o6U-mF-C5H"/>
-                <constraint firstItem="mAJ-JK-a99" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="vfS-j8-yZo"/>
+                <constraint firstItem="Q4e-BI-Dd4" firstAttribute="top" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="-23" id="pt1-CZ-sCb"/>
                 <constraint firstAttribute="bottom" secondItem="Q4e-BI-Dd4" secondAttribute="bottom" constant="30.333333333333329" id="y20-DM-nOY"/>
             </constraints>
             <connections>
@@ -65,6 +68,5 @@
     </objects>
     <resources>
         <image name="RedHat" width="390" height="140"/>
-        <image name="getButton" width="38" height="38"/>
     </resources>
 </document>

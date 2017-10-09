@@ -11,6 +11,8 @@ import Firebase
 import FirebaseDatabase
 import CDAlertView
 
+
+
 class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     
@@ -58,6 +60,7 @@ class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                         self.comments.append(content)
                     }
     }
+                self.comments.reverse()
                 self.tableView.reloadData()
             })
     }
@@ -69,7 +72,7 @@ class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func configurePopup() {
-        let alert = CDAlertView(title: "LevelUp!", message: "Your mnemmal has been submitted. Have a look on what our community has done so far for that day of the story", type: .success)
+        let alert = CDAlertView(title: "LevelUp!", message: "Your mnemmal has been submitted. Have a look on what our community has done so far for that day of the story.", type: .success)
         let doneAction = CDAlertViewAction(title: "OK")
         alert.add(action: doneAction)
         alert.show()

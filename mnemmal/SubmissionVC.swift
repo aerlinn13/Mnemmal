@@ -20,7 +20,7 @@ class SubmissionVC: UIViewController,
     }
 
     @IBOutlet weak var bgImage: UIImageView!
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textView: MyTextView!
     @IBOutlet weak var headerLabel: UILabel!
     @IBAction func close(_ sender: Any) {
         textView.resignFirstResponder()
@@ -120,17 +120,53 @@ class SubmissionVC: UIViewController,
     
     func didPressButton(string:String) {
         self.textView.text.append(" " + string)
+        print(string)
         self.wordsPool!.remove(at: self.wordIndexPath!.row)
         self.collectionView.deleteItems(at: [self.wordIndexPath!])
         if wordsPool!.count == 0 {
         self.collectionView.isHidden = true
-        self.submitButton.isHidden = false
         self.timer.invalidate()
-        }
+        self.submitButton.isHidden = false
+            }
         self.textView.becomeFirstResponder()
     }
     
+    // - MARK: Textview methods
     
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+            
+        }
+        checkSubmitButtonAvailability()
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        checkSubmitButtonAvailability()
+    }
+    
+    func checkSubmitButtonAvailability() {
+        self.headerLabel.text = String(describing: textView.text.characters.count) + "/300"
+        if textView.text.characters.count < 100 {
+            self.headerLabel.textColor = UIColor.red
+            self.submitButton.backgroundColor = UIColor.lightGray
+            self.submitButton.setTitle("100 characters to proceed", for: .normal)
+            self.submitButton.isUserInteractionEnabled = false
+        } else {
+            self.headerLabel.textColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
+            self.submitButton.backgroundColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
+            self.submitButton.setTitle("Submit", for: .normal)
+            self.submitButton.isUserInteractionEnabled = true
+        }
+        if textView.text.characters.count == 301 { textView.text.removeLast(1) }
+        textView.text = textView.text.replacingOccurrences(of: "   ", with: " ")
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if textView.text.count < 301 { return true }
+        else { return false }
+    }
     
     
     
@@ -201,14 +237,16 @@ class SubmissionVC: UIViewController,
         dayNumber.textColor = UIColor(hexString: color)
         }
         submitButton.isHidden = true
+        textView.text = "War never changes..."
+        textView.textColor = UIColor.lightGray
     }
 
     func configurePopup() {
         if popupAppeared == false {
-        let alert = CDAlertView(title: "I am good", message: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).", type: .custom(image: UIImage(named: "1")!))
-        alert.alertBackgroundColor = UIColor(red: 248/255.0, green: 236/255.0, blue: 194/255.0, alpha: 1)
-        alert.circleFillColor = UIColor(red: 248/255.0, green: 236/255.0, blue: 194/255.0, alpha: 1)
-            alert.show()
+            let alert = CDAlertView(title: "I am good", message: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).", type: .custom(image: UIImage(named: "1")!))
+            alert.show({alert in
+                self.textView.becomeFirstResponder()
+            })
             popupAppeared = true
         }
     }

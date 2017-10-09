@@ -7,8 +7,8 @@
 //
 
 import XCTest
+import Firebase
 @testable import mnemmal
-@testable import Firebase
 
 
 class mnemmalTests: XCTestCase {

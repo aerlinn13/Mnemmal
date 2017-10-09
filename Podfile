@@ -10,6 +10,9 @@ pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod "CDAlertView"
+pod "FacebookCore"
+pod "FacebookLogin"
+pod 'SideMenu'
 
   target 'mnemmalTests' do
     inherit! :search_paths

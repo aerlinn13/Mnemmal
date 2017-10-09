@@ -11,7 +11,7 @@ import Foundation
 struct User {
     var id: String?
     var storiesActive: Array<String>?
-    var status: String?
+    var status = "basic"
     var premiumExpires: Date?
     var onboardingDone: Bool?
     var wordsPerLevel: Int?
