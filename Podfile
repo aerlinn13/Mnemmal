@@ -9,11 +9,16 @@ target 'mnemmal' do
 pod 'Firebase'
 pod 'Firebase/Auth'
 pod 'Firebase/Database'
-pod "CDAlertView"
+pod 'Firebase/Storage'
+pod 'FirebaseUI/Storage'
 pod "FacebookCore"
 pod "FacebookLogin"
 pod 'SideMenu'
 pod "BouncyLayout"
+pod 'PKHUD', '~> 4.0'
+pod 'Fabric'
+pod 'Crashlytics'
+pod 'Hero'
   target 'mnemmalTests' do
     inherit! :search_paths
     # Pods for testing

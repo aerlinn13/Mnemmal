@@ -32,12 +32,6 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="TableViewCellLine" translatesAutoresizingMaskIntoConstraints="NO" id="uaC-jm-9a5">
-                        <rect key="frame" x="8" y="96" width="398" height="2"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="2" id="ePB-Zy-abv"/>
-                        </constraints>
-                    </imageView>
                     <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="NHL-1B-tBZ">
                         <rect key="frame" x="16" y="102" width="382" height="30"/>
                         <subviews>
@@ -96,23 +90,19 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottomMargin" secondItem="NHL-1B-tBZ" secondAttribute="bottom" constant="8" id="1kA-eo-3WE"/>
-                    <constraint firstItem="uaC-jm-9a5" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leadingMargin" id="48W-8X-ity"/>
                     <constraint firstAttribute="trailing" secondItem="Zqf-Uf-r55" secondAttribute="trailing" constant="8" id="Bun-38-ylN"/>
                     <constraint firstItem="2cL-a2-Ke7" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leadingMargin" constant="8" id="CzJ-Mr-GKw"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Pot-gr-38b" secondAttribute="trailing" constant="8" id="Fas-qa-xrr"/>
                     <constraint firstItem="NHL-1B-tBZ" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leadingMargin" constant="8" id="GO4-cA-Xxa"/>
-                    <constraint firstItem="NHL-1B-tBZ" firstAttribute="top" secondItem="uaC-jm-9a5" secondAttribute="bottom" constant="4" id="Kh3-FF-GR2"/>
                     <constraint firstItem="Zqf-Uf-r55" firstAttribute="top" secondItem="UKZ-ry-ODq" secondAttribute="top" constant="8" id="SWs-lz-vkW"/>
                     <constraint firstItem="Zqf-Uf-r55" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leading" constant="8" id="Uzt-Ye-7De"/>
                     <constraint firstItem="Pot-gr-38b" firstAttribute="top" secondItem="Vkr-yv-rDm" secondAttribute="bottom" constant="8" id="VBr-MP-gZ6"/>
                     <constraint firstAttribute="trailingMargin" secondItem="NHL-1B-tBZ" secondAttribute="trailing" constant="8" id="WFB-Zw-ar2"/>
-                    <constraint firstItem="uaC-jm-9a5" firstAttribute="top" secondItem="Pot-gr-38b" secondAttribute="bottom" constant="4" id="Wnf-hW-Ufx"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Vkr-yv-rDm" secondAttribute="trailing" constant="8" id="YIh-nN-iZw"/>
                     <constraint firstAttribute="bottom" secondItem="Zqf-Uf-r55" secondAttribute="bottom" constant="8" id="Yva-gh-cTK"/>
                     <constraint firstItem="Vkr-yv-rDm" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leadingMargin" constant="8" id="dZc-VV-QfH"/>
                     <constraint firstItem="Vkr-yv-rDm" firstAttribute="top" secondItem="2cL-a2-Ke7" secondAttribute="bottom" constant="8" id="pOi-ks-D5a"/>
                     <constraint firstItem="2cL-a2-Ke7" firstAttribute="top" secondItem="UKZ-ry-ODq" secondAttribute="topMargin" constant="8" id="t5D-if-Wja"/>
-                    <constraint firstItem="uaC-jm-9a5" firstAttribute="trailing" secondItem="UKZ-ry-ODq" secondAttribute="trailingMargin" id="uXd-NT-mwq"/>
                     <constraint firstItem="Pot-gr-38b" firstAttribute="leading" secondItem="UKZ-ry-ODq" secondAttribute="leadingMargin" constant="8" id="zvF-Ma-SND"/>
                 </constraints>
             </tableViewCellContentView>
@@ -126,6 +116,5 @@
     </objects>
     <resources>
         <image name="ClearComment" width="580" height="210"/>
-        <image name="TableViewCellLine" width="579" height="2"/>
     </resources>
 </document>

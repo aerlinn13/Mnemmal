@@ -13,5 +13,13 @@ protocol WordDelegate {
 }
 
 protocol FetchWordsAfterSubmissionDelegate {
-    func fetchWordsAfterSubmission(storyLevel: String, indexPath: IndexPath)
+    func fetchWordsAfterSubmission(storyLevel: String, completedStatus: Bool, indexPath: IndexPath)
+}
+
+protocol StoryRemovalDelegate {
+    func removeStory(indexPath: IndexPath, storyId: String)
+}
+
+protocol UserUpdatedDelegate {
+    func updateUserObject(user: User)
 }

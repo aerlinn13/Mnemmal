@@ -7,12 +7,19 @@
 //
 
 import Foundation
+import UIKit
 
 struct User {
     var id: String?
+    var fbId: String?
+    var fbPicURL: String?
+    var name: String?
+    var email: String?
     var storiesActive: Array<String>?
     var status = "basic"
     var premiumExpires: Date?
     var onboardingDone: Bool?
     var wordsPerLevel: Int?
+    var picture: UIImage?
+    var storyTrack = [String: String]()
 }

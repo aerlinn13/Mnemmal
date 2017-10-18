@@ -57,7 +57,7 @@
                             <constraint firstAttribute="height" constant="25" id="fAT-MP-LuN"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAY 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pCZ-03-V47">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAY 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="pCZ-03-V47">
                         <rect key="frame" x="327" y="105" width="43" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="E1g-Lx-Vh4"/>

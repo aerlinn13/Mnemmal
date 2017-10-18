@@ -8,7 +8,6 @@
 
 import UIKit
 import FirebaseDatabase
-import CDAlertView
 
 class SubmissionVC: UIViewController,
  UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, WordDelegate {
@@ -24,18 +23,20 @@ class SubmissionVC: UIViewController,
     @IBOutlet weak var headerLabel: UILabel!
     @IBAction func close(_ sender: Any) {
         textView.resignFirstResponder()
-        self.dismiss(animated: true, completion: nil)
+        if self.textView.text.count != 0 {
+            confirmDismissal() } else {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     @IBOutlet weak var closeOutlet: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     @IBOutlet weak var submitButton: UIButton!
     @IBAction func sumbitButtonAct(_ sender: Any) {
         submitInstance()
         increaseStoryLevel()
         submitWordsAsUsed()
-        performSegue(withIdentifier: "levelup", sender: self)
-        fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, indexPath: self.storyIndexPath!)
+        configureCloser()
+        fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, completedStatus: (self.story?.completed)!, indexPath: self.storyIndexPath!)
     }
     
     
@@ -45,6 +46,8 @@ class SubmissionVC: UIViewController,
     var wordsPool: Array<Word>?
     var storyIndexPath: IndexPath?
     var fetchDelegate: FetchWordsAfterSubmissionDelegate!
+    var dayForToday: Day?
+    
 
 
     // - MARK: CollectionView methods
@@ -85,7 +88,7 @@ class SubmissionVC: UIViewController,
     var timer = Timer()
     func setTimer() {
         if self.wordsPool?.count != 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(SubmissionVC.autoScroll), userInfo: nil, repeats: true)
+            self.timer = Timer.scheduledTimer(timeInterval: 7.0, target: self, selector: #selector(SubmissionVC.autoScroll), userInfo: nil, repeats: true)
         }
     }
     
@@ -111,6 +114,7 @@ class SubmissionVC: UIViewController,
             let nextScene =  segue.destination as! WordOverlookVC
             if let word = self.wordToPass { nextScene.word = word }
             nextScene.delegate = self
+            self.textView.resignFirstResponder()
         } else if segue.identifier == "levelup" {
             let nextScene = segue.destination as! LevelUpVC
             if let story = self.story { nextScene.story = story }
@@ -119,15 +123,16 @@ class SubmissionVC: UIViewController,
     
     func didPressButton(string:String) {
         self.textView.text.append(" " + string)
+        self.textView.becomeFirstResponder()
         print(string)
         self.wordsPool!.remove(at: self.wordIndexPath!.row)
         self.collectionView.deleteItems(at: [self.wordIndexPath!])
+        self.timer.invalidate()
         if wordsPool!.count == 0 {
         self.collectionView.isHidden = true
-        self.timer.invalidate()
         self.submitButton.isHidden = false
-            }
-        self.textView.becomeFirstResponder()
+        }
+        
     }
     
     // - MARK: Textview methods
@@ -147,10 +152,10 @@ class SubmissionVC: UIViewController,
     
     func checkSubmitButtonAvailability() {
         self.headerLabel.text = String(describing: textView.text.characters.count) + "/300"
-        if textView.text.characters.count < 100 {
+        if textView.text.characters.count < 50 {
             self.headerLabel.textColor = UIColor.red
             self.submitButton.backgroundColor = UIColor.lightGray
-            self.submitButton.setTitle("100 characters to proceed", for: .normal)
+            self.submitButton.setTitle("50 characters to proceed", for: .normal)
             self.submitButton.isUserInteractionEnabled = false
         } else {
             self.headerLabel.textColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
@@ -208,9 +213,11 @@ class SubmissionVC: UIViewController,
         let level = storylvl + 1
         let lvl = String(describing: level)
         daysRef.setValue("\(lvl)")
-            print("Level for the story \(self.story!.title) has been set to \(lvl)") }
+        print("Level for the story \(self.story!.title) has been set to \(lvl)") }
         else {
-            print("DaysAmount limit (\(storylvl) days) is reached. Story is to be deleted from user account.")
+        print("DaysAmount limit (\(storylvl) days) is reached. Story is completed")
+            self.story?.completed = true
+            self.submitStoryAsCompleted()
         }
     }
     
@@ -223,9 +230,38 @@ class SubmissionVC: UIViewController,
         }
     }
     
+    func submitStoryAsCompleted() {
+        print("submitStoryAsCompleted() is invoked")
+        let storyRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(self.story!.id)/completed")
+        storyRef.setValue("true")
+
+    }
+    
+    // MARK: - Cancellation
+    
+    func confirmDismissal() {
+        let alertController = UIAlertController(title: nil, message: "Do you want to close this story? All your writing will be lost.", preferredStyle: .alert)
+        let yesButton = UIAlertAction(title: "Yes", style: .destructive, handler: { (action) -> Void in
+            print("Yes")
+            self.dismiss(animated: true, completion: nil)
+        })
+        let noButton = UIAlertAction(title: "No", style: .default, handler: { (action) -> Void in
+            print("No")
+        })
+        alertController.addAction(yesButton)
+        alertController.addAction(noButton)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    // MARK:- Preparing Controller to presentation
+    
+    func configureDayForToday() {
+        dayForToday = story?.days[(user?.storyTrack[(story?.id)!])!]
+    }
+    
     func configureHeader() {
-        if let image = story?.image {
-            bgImage.image = UIImage(named: image) }
+        if let image = story?.id {
+            bgImage.image = story?.image }
         if let color = story?.titleColor {
             headerLabel.textColor = UIColor(hexString: color)
         }
@@ -234,20 +270,50 @@ class SubmissionVC: UIViewController,
         textView.textColor = UIColor.lightGray
     }
 
-    func configurePopup() {
-        if popupAppeared == false {
-            let alert = CDAlertView(title: "I am good", message: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).", type: .custom(image: UIImage(named: "1")!))
-            alert.show({alert in
-                self.textView.becomeFirstResponder()
-            })
-            popupAppeared = true
+    func configureOpener() {
+        if openerAppeared == false {
+        let alertController = UIAlertController(title: dayForToday?.name, message: dayForToday?.opener, preferredStyle: .alert)
+        
+        let okButton = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in
+            print("Ok button tapped")
+            self.textView.becomeFirstResponder()
+        })
+        alertController.addAction(okButton)
+        self.present(alertController, animated: true, completion: nil)
+        openerAppeared = true
         }
     }
     
+    var openerAppeared = false
+    
+    func configureCloser() {
+        textView.resignFirstResponder()
+        let alertController = UIAlertController(title: nil, message: dayForToday?.closer, preferredStyle: .actionSheet)
+        let closerOption0 = UIAlertAction(title: dayForToday?.closerOption0 ?? "FUCK YOU", style: .default, handler: { (action) -> Void in
+            self.updateStoryTrack("0")
+            self.performSegue(withIdentifier: "levelup", sender: self)
+        })
+        alertController.addAction(closerOption0)
+        if let closerOption = dayForToday?.closerOption1 {
+            let closerOption1 = UIAlertAction(title: closerOption, style: .default, handler: { (action) -> Void in
+                self.updateStoryTrack("1")
+                self.performSegue(withIdentifier: "levelup", sender: self)
+            })
+            alertController.addAction(closerOption1)
+        }
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func updateStoryTrack(_ option: String) {
+        user?.storyTrack[story!.id]?.append(option)
+        print("story track for story now is " + (user?.storyTrack[story!.id])!)
+        let storyTrackRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(self.story!.id)/storyTrack")
+        let track = user!.storyTrack[story!.id]!
+        storyTrackRef.setValue(track)
+    }
+    
     func registerNibs() {
-        let nib0 = UINib(nibName: "SubtextCollectionViewCell", bundle: nil)
         let nib1 = UINib(nibName: "WordCollectionViewCell", bundle: nil)
-        collectionView.register(nib0, forCellWithReuseIdentifier: "SubtextCollectionViewCell")
         collectionView.register(nib1, forCellWithReuseIdentifier: "WordCollectionViewCell")
     }
     
@@ -264,8 +330,9 @@ class SubmissionVC: UIViewController,
         print("Amount of words trasferred is " + String(wordsPool!.count))
         print("Story title is " + String(describing: story!.title))
         print("Current level for Story transferred to VC is " + String(describing: story!.storyLevel))
-}
+        configureDayForToday()
+    }
     override func viewDidAppear(_ animated: Bool) {
-        configurePopup()
+        configureOpener()
     }
 }

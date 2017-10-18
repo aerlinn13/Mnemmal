@@ -9,7 +9,6 @@
 import UIKit
 import Firebase
 import FirebaseDatabase
-import CDAlertView
 
 
 
@@ -31,6 +30,7 @@ class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var greenView: UIView!
     
     // - MARK: TableView methods
     
@@ -71,13 +71,6 @@ class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if let title = self.story?.title { self.titleLabel.text = title }
     }
     
-    func configurePopup() {
-        let alert = CDAlertView(title: "Hurray", message: "Your mnemmal has been submitted. Have a look on what our community has done so far for that day of the story.", type: .success)
-        let doneAction = CDAlertViewAction(title: "OK")
-        alert.add(action: doneAction)
-        alert.show()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let nibb = UINib(nibName: "TableViewCell", bundle: nil)
@@ -87,8 +80,9 @@ class LevelUpVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.layoutIfNeeded()
         setUpVC()
         
+        // HERO
+        
     }
     override func viewDidAppear(_ animated: Bool) {
-        configurePopup()
     }
 }

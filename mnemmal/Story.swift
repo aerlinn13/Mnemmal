@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class Story {
     var isActive: Bool = false
@@ -19,14 +20,17 @@ class Story {
     var premium: Bool = false
     var titleColor: String = ""
     var wordsColor: String = ""
-    var image: String = ""
     var hidden: Bool = false
     var storyLevel = "1"
+    var image = UIImage()
     var wordsObj: Array<Word>?
     var lastDate: String?
-    var newDay: Bool?
+    var newDay: Bool = false
+    var coding: String?
+    var days: Dictionary<String, Day> = [String: Day]()
+    var completed: Bool = false
     
-    init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, premium: Bool, titleColor: String, wordsColor: String, image: String, hidden: Bool) {
+    init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, premium: Bool, titleColor: String, wordsColor: String, hidden: Bool) {
         self.isActive = isActive
         self.title = title
         self.daysAmount = daysAmount
@@ -37,7 +41,6 @@ class Story {
         self.premium = premium
         self.titleColor = titleColor
         self.wordsColor = wordsColor
-        self.image = image
         self.hidden = hidden
     }
     
