@@ -23,10 +23,20 @@
                 <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RedHat" translatesAutoresizingMaskIntoConstraints="NO" id="w6J-Kj-emB">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="w6J-Kj-emB">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cyi-5g-Ae9">
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cdj-DS-bjg" userLabel="removeButton">
+                        <rect key="frame" x="11" y="11" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="SDr-9Y-UsW"/>
+                            <constraint firstAttribute="width" constant="20" id="eQK-fm-E6C"/>
+                        </constraints>
+                        <state key="normal" image="closeButtonGray">
+                            <color key="titleColor" red="0.86666666670000003" green="0.10980392160000001" blue="0.1019607843" alpha="1" colorSpace="calibratedRGB"/>
+                        </state>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="cyi-5g-Ae9">
                         <rect key="frame" x="190.33333333333337" y="57" width="9.6666666666666572" height="27"/>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,6 +50,14 @@
                         </constraints>
                         <state key="normal" image="getButton"/>
                     </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hwp-si-faA" userLabel="overviewButton">
+                        <rect key="frame" x="319" y="104" width="60" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="AT2-qQ-KgP"/>
+                            <constraint firstAttribute="height" constant="25" id="K6g-Vn-ePo"/>
+                        </constraints>
+                        <state key="normal" image="overview"/>
+                    </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Premium story" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Zb-6R-xwR">
                         <rect key="frame" x="320" y="126" width="58" height="8"/>
                         <constraints>
@@ -51,14 +69,14 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="DayNum" translatesAutoresizingMaskIntoConstraints="NO" id="Kb5-If-f7l">
-                        <rect key="frame" x="318" y="103" width="60" height="25"/>
+                        <rect key="frame" x="319" y="104" width="60" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="60" id="Nem-Ff-c7p"/>
                             <constraint firstAttribute="height" constant="25" id="fAT-MP-LuN"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DAY 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="pCZ-03-V47">
-                        <rect key="frame" x="327" y="105" width="43" height="21"/>
+                        <rect key="frame" x="327" y="106" width="43" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="E1g-Lx-Vh4"/>
                             <constraint firstAttribute="width" constant="43" id="veR-vY-uAN"/>
@@ -70,26 +88,32 @@
                 </subviews>
             </view>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Kb5-If-f7l" secondAttribute="bottom" constant="12" id="2nI-Wg-dnq"/>
-                <constraint firstAttribute="trailing" secondItem="pCZ-03-V47" secondAttribute="trailing" constant="20" id="BKw-jN-eNk"/>
-                <constraint firstItem="3Zb-6R-xwR" firstAttribute="top" secondItem="pCZ-03-V47" secondAttribute="bottom" id="EnK-rA-gCq"/>
+                <constraint firstAttribute="bottom" secondItem="Kb5-If-f7l" secondAttribute="bottom" constant="11" id="2nI-Wg-dnq"/>
+                <constraint firstItem="pCZ-03-V47" firstAttribute="centerY" secondItem="Kb5-If-f7l" secondAttribute="centerY" id="A2r-VC-vIO"/>
                 <constraint firstAttribute="trailing" secondItem="3Zb-6R-xwR" secondAttribute="trailing" constant="12" id="I9w-tD-XLz"/>
                 <constraint firstAttribute="trailing" secondItem="mAJ-JK-a99" secondAttribute="trailing" constant="11" id="Lkr-pl-4Ep"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Obt-l5-mcI"/>
+                <constraint firstItem="cdj-DS-bjg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="11" id="R2J-Va-gN3"/>
                 <constraint firstAttribute="trailing" secondItem="w6J-Kj-emB" secondAttribute="trailing" id="TiJ-uy-ri0"/>
                 <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="Vcf-Pd-MM9"/>
                 <constraint firstItem="cyi-5g-Ae9" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="bkn-ST-XMl"/>
+                <constraint firstItem="cdj-DS-bjg" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="11" id="e29-HB-IoV"/>
                 <constraint firstAttribute="bottom" secondItem="w6J-Kj-emB" secondAttribute="bottom" id="fX6-QG-asW"/>
                 <constraint firstAttribute="bottom" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="16" id="kFm-b9-yiw"/>
-                <constraint firstAttribute="trailing" secondItem="Kb5-If-f7l" secondAttribute="trailing" constant="12" id="kHT-m9-p4B"/>
+                <constraint firstAttribute="trailing" secondItem="Kb5-If-f7l" secondAttribute="trailing" constant="11" id="kHT-m9-p4B"/>
+                <constraint firstAttribute="trailing" secondItem="Hwp-si-faA" secondAttribute="trailing" constant="11" id="nzm-Ie-xky"/>
                 <constraint firstItem="w6J-Kj-emB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="o6U-mF-C5H"/>
                 <constraint firstItem="3Zb-6R-xwR" firstAttribute="top" secondItem="mAJ-JK-a99" secondAttribute="bottom" constant="2" id="pVq-MR-pq9"/>
+                <constraint firstItem="pCZ-03-V47" firstAttribute="centerX" secondItem="Kb5-If-f7l" secondAttribute="centerX" id="vSy-zc-Bz8"/>
+                <constraint firstAttribute="bottom" secondItem="Hwp-si-faA" secondAttribute="bottom" constant="11" id="zcw-5B-kAC"/>
             </constraints>
             <connections>
                 <outlet property="dayNumBG" destination="Kb5-If-f7l" id="5Qf-OG-byx"/>
                 <outlet property="dayNumLabel" destination="pCZ-03-V47" id="GPT-Ng-Jef"/>
                 <outlet property="getButton" destination="mAJ-JK-a99" id="CHL-i1-gE5"/>
+                <outlet property="overviewButton" destination="Hwp-si-faA" id="oFv-z7-1zt"/>
                 <outlet property="premium" destination="3Zb-6R-xwR" id="SkS-xE-U1F"/>
+                <outlet property="removeButton" destination="cdj-DS-bjg" id="WdH-V1-OFD"/>
                 <outlet property="scrollingImage" destination="w6J-Kj-emB" id="E4h-zC-TZn"/>
                 <outlet property="storyLabel" destination="cyi-5g-Ae9" id="9zu-O7-Yoi"/>
             </connections>
@@ -97,7 +121,8 @@
     </objects>
     <resources>
         <image name="DayNum" width="60" height="25"/>
-        <image name="RedHat" width="390" height="140"/>
+        <image name="closeButtonGray" width="50" height="50"/>
         <image name="getButton" width="60" height="25"/>
+        <image name="overview" width="60" height="25"/>
     </resources>
 </document>

@@ -8,8 +8,7 @@
 
 import UIKit
 
-
-class SummaryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class SummaryVC: UIViewController {
 
     
     // - MARK: IB variables
@@ -31,8 +30,7 @@ class SummaryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     @IBOutlet weak var closeOutlet: UIButton!
     @IBOutlet weak var bgImage: UIImageView!
     @IBOutlet weak var headerLabel: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
-    
+
     // - MARK:  Variables
     
     var story: Story?
@@ -40,35 +38,21 @@ class SummaryVC: UIViewController, UICollectionViewDelegate, UICollectionViewDat
     var delegate: StoryRemovalDelegate!
     var storyIndexPath: IndexPath?
     
-    // - MARK: CollectionView methods
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SummaryCollectionViewCell", for: indexPath) as! SummaryCollectionViewCell
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
-    }
-
+    // UI configuration
 
     
     func configureHeader() {
-        if let image = story?.id {
-            bgImage.image = story?.image }
+        bgImage.image = story?.image
         if let title = story?.title {
             headerLabel.text = title }
-        if let color = story?.titleColor {
-            headerLabel.textColor = UIColor(hexString: color)
-            closeOutlet.setTitleColor(UIColor(hexString: color), for: .normal)
-        }
         deleteStoryOutlet.layer.cornerRadius = 10.0
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureHeader()
-        let nib = UINib(nibName: "SummaryCollectionViewCell", bundle: nil)
-        collectionView.register(nib, forCellWithReuseIdentifier: "SummaryCollectionViewCell")
+        bgImage.heroID = "cellImage"
+        headerLabel.heroID = "header"
     }
 }

@@ -17,6 +17,7 @@ class Story {
     var genre: String = ""
     var words: Array<String> = [String]()
     var subtext: String = ""
+    var epigraph: String = ""
     var premium: Bool = false
     var titleColor: String = ""
     var wordsColor: String = ""
@@ -29,8 +30,10 @@ class Story {
     var coding: String?
     var days: Dictionary<String, Day> = [String: Day]()
     var completed: Bool = false
+    var firstParty: String?
+    var secondParty: String?
     
-    init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, premium: Bool, titleColor: String, wordsColor: String, hidden: Bool) {
+    init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, epigraph: String, premium: Bool, titleColor: String, wordsColor: String, hidden: Bool, firstParty: String, secondParty: String) {
         self.isActive = isActive
         self.title = title
         self.daysAmount = daysAmount
@@ -38,10 +41,12 @@ class Story {
         self.genre = genre
         self.words = words
         self.subtext = subtext
+        self.epigraph = epigraph
         self.premium = premium
         self.titleColor = titleColor
         self.wordsColor = wordsColor
         self.hidden = hidden
+        self.firstParty = firstParty
+        self.secondParty = secondParty
     }
-    
 }

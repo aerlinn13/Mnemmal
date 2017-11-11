@@ -22,7 +22,9 @@ class MainCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var dayNumBG: UIImageView!
     
+    @IBOutlet weak var removeButton: UIButton!
     
+    @IBOutlet weak var overviewButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -22,4 +22,5 @@ struct User {
     var wordsPerLevel: Int?
     var picture: UIImage?
     var storyTrack = [String: String]()
+    var likedMnemmals = [String: [String]]()
 }

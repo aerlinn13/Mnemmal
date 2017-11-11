@@ -133,3 +133,25 @@ extension UIView {
         self.layer.mask = mask
     }
 }
+
+extension UIView {
+    class func loadFromNibNamed(nibNamed: String, bundle : Bundle? = nil) -> UIView? {
+        return UINib(
+            nibName: nibNamed,
+            bundle: bundle
+            ).instantiate(withOwner: nil, options: nil)[0] as? UIView
+    }
+}
+
+
+@IBDesignable class UITextViewFixed: UITextView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setup()
+    }
+    func setup() {
+        textContainerInset = UIEdgeInsets.zero
+        textContainer.lineFragmentPadding = 0
+    }
+}
+

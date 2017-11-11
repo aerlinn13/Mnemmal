@@ -9,6 +9,7 @@
 import UIKit
 
 protocol WordDelegate {
+    func cancel()
     func didPressButton(string:String)
 }
 
@@ -22,4 +23,25 @@ protocol StoryRemovalDelegate {
 
 protocol UserUpdatedDelegate {
     func updateUserObject(user: User)
+}
+
+protocol GetStoryDelegate {
+    func getStory()
+    func scrollToCenter()
+}
+
+protocol WordCollectionDelegate {
+    func performWordOutlook(indexPath: IndexPath)
+}
+
+protocol  CommentsDelegate {
+    func updateMnemmalComments()
+}
+
+protocol MnemmalOverlookDelegate {
+    func perform(mnemmal: Mnemmal)
+}
+
+protocol  ShareDelegate {
+    func shareContent(content: String)
 }

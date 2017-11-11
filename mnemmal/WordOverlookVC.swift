@@ -11,14 +11,12 @@ import UIKit
 class WordOverlookVC: UIViewController {
     
     var word: Word?
-    var delegate: WordDelegate?
+    var delegate: WordDelegate!
     
+    @IBOutlet weak var yellowView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
-    
     @IBOutlet weak var def: UITextView!
-    
     @IBOutlet weak var examples: UITextView!
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -28,17 +26,16 @@ class WordOverlookVC: UIViewController {
     
     @IBAction func cancel(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
+        delegate.cancel()
+        print("wordOverlookVC: screen is dismissed.")
     }
     
     @IBAction func insert(_ sender: Any) {
-        didPress()
+        delegate.didPressButton(string: titleLabel.text!)
         self.cancel(self)
+        print("wordOverlookVC: word is inserted.")
     }
     
-    func didPress() {
-        delegate?.didPressButton(string: titleLabel.text!)
-        print("didPress")
-    }
     
     func setUpVC() {
         titleLabel.text = word?.title
@@ -51,17 +48,10 @@ class WordOverlookVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpVC()
+
+        // HERO
+        yellowView.heroID = "yellow"
+        titleLabel.heroID = "title"
+        def.heroID = "def"
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
