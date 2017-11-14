@@ -176,7 +176,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         if let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as? SubmissionContentTableViewCell {
         cell.headerLabel.text = String(describing: 300 - cell.textView.text.characters.count)
         if cell.textView.text.characters.count < 50 {
-            cell.headerView.backgroundColor = UIColor.lightGray
+            cell.headerView.backgroundColor = UIColor(red: 6/255.0, green: 71/255.0, blue: 128/255.0, alpha: 1)
             cell.submitButton.isHidden = true
         } else if cell.textView.text.characters.count < 280 {
                 cell.headerView.backgroundColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
@@ -275,7 +275,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         print("submitButtonAct(): invoked")
         self.view.endEditing(true)
         deleteFirstSpace()
-        submitMnemmalAndDailySummary()()
+        submitMnemmal()
         submitWordsAsUsed()
         increaseStoryLevel()
         fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, completedStatus: (self.story?.completed)!, indexPath: self.storyIndexPath!)
@@ -295,7 +295,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         let id = userId + ":" + storyId + ":" + storyTrack!
         let time = getCurrentTime()
         let content = cell.textView.text
-        let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack, time: time, likesAmount: "0", content: content, comments: nil, liked: false)
+        let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack!, time: time, likesAmount: "0", content: content!, liked: false)
         self.mnemmalSent = mnemmal
         let userRef = Database.database().reference().child("users/\(userId)/stories/\(storyId)/instances/\(storyTrack!)").childByAutoId()
         userRef.child("ID").setValue(id)
@@ -327,21 +327,21 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     func submitDailySummary(option: String) {
         print("submitDailySummary(): invoked")
         // submitting DailySummary
-        let summaryRef = Database.database().reference().child("users/\(self.user!.id)/stories/\(storyId)/summaries/\(storyTrack!)")
         if let mnemmal = self.mnemmalSent {
+            let summaryRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(mnemmal.storyId)/summaries/\(mnemmal.storyTrack)")
         summaryRef.child("ID").setValue(mnemmal.id)
-        summaryRef.child("storyTrack").setValue(mnemmal.storyTrack!)
+        summaryRef.child("storyTrack").setValue(mnemmal.storyTrack)
         summaryRef.child("title").setValue(self.dayForToday?.name)
         summaryRef.child("opener").setValue(self.dayForToday?.opener)
         summaryRef.child("mnemmalContent").setValue(mnemmal.content)
         summaryRef.child("mnemmalDate").setValue(mnemmal.time)
-        summaryRef.child("closer").setValue(self.dayForToday.closer)
+            summaryRef.child("closer").setValue(self.dayForToday?.closer)
         switch option {
             case "0": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption0)
             case "1": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption1)
         default: break
-        print("submitDailySummary(): dailySummary has been submitted")
         }
+            print("submitDailySummary(): dailySummary has been submitted")
     }
     }
     
@@ -522,7 +522,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
                         let likesAmount = snap.childSnapshot(forPath: "likesAmount").value as? String ?? "0"
                         let content = snap.childSnapshot(forPath: "content").value as! String
                         print("retrieveMnemmals(): comment is: " + content)
-                        let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack, time: time, likesAmount: likesAmount, content: content, comments: Array<MnemmalComment>(), liked: false)
+                        let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack, time: time, likesAmount: likesAmount, content: content, liked: false)
                         self.mnemmals.append(mnemmal)
                     }
                 }

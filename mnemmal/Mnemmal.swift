@@ -13,7 +13,7 @@ class Mnemmal {
     let userId: String
     let fbId: String
     let userName: String
-    let storyId:String
+    let storyId: String
     let storyTrack: String
     let time: String
     var likesAmount: String
@@ -21,7 +21,7 @@ class Mnemmal {
     var comments = Array<MnemmalComment>()
     var liked: Bool
     
-    init(id: String, userId: String, fbId: String, userName: String, storyId: String, storyTrack: String, time: String, likesAmount: String, content: String, comments: Array<MnemmalComment>, liked: Bool ) {
+    init(id: String, userId: String, fbId: String, userName: String, storyId: String, storyTrack: String, time: String, likesAmount: String, content: String, liked: Bool ) {
         self.id = id
         self.userId = userId
         self.fbId = fbId
@@ -31,7 +31,6 @@ class Mnemmal {
         self.time = time
         self.likesAmount = likesAmount
         self.content = content
-        self.comments = comments
         self.liked = liked
     }
 }

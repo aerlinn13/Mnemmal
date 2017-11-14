@@ -242,7 +242,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                     let premium = snap.childSnapshot(forPath: "premium").value as! Bool
                     let firstParty = snap.childSnapshot(forPath: "firstParty").value as! String
                     let secondParty = snap.childSnapshot(forPath: "secondParty").value as! String
-                    let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, words: words, subtext: subtext, epigraph: epigraph, premium: premium, titleColor: titleColor, wordsColor: "grey", hidden: false, firstParty: firstParty, secondParty: secondParty, summaries: nil)
+                    let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, words: words, subtext: subtext, epigraph: epigraph, premium: premium, titleColor: titleColor, wordsColor: "grey", hidden: false, firstParty: firstParty, secondParty: secondParty)
                 self.storiesForCollectionView.append(story)
                     } else { print("retrieveAllStories(): story is inactive") }
                     print("retrieveAllStories(): Amount of stories in upper CollectionView is " + String(self.storiesForCollectionView.count))
@@ -591,6 +591,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         self.storiesAddedSource[indexPath.row].newDay = false
         loadWordsForStories(withFetchingStories: false)
         self.storiesAddedSource[indexPath.row].lastDate = getCurrentDate()
+        self.retrieveSummariesForStories()
         self.getCurrentLevelsForStoriesAdded()
         self.collectionViewUp.reloadData()
         self.collectionViewDown.reloadData()
