@@ -26,8 +26,7 @@ protocol UserUpdatedDelegate {
 }
 
 protocol GetStoryDelegate {
-    func getStory()
-    func scrollToCenter()
+    func getStory(initialStoryTrack: String)
 }
 
 protocol WordCollectionDelegate {

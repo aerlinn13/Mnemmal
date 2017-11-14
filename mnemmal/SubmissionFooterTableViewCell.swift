@@ -14,6 +14,17 @@ import Firebase
 class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
 
     
+    @IBOutlet weak var segments: UISegmentedControl!
+    @IBAction func segmentAction(_ sender: Any) {
+        switch segments.selectedSegmentIndex
+        {
+        case 0: self.sortMnemmals(option: 0)
+        case 1: self.sortMnemmals(option: 1)
+        case 2: self.sortMnemmals(option: 2)
+        default:
+            break
+        }
+    }
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var completeButton: UIButton!
     @IBOutlet weak var myView: UIView!
@@ -22,16 +33,20 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
     var shareDelegate: ShareDelegate!
     
     
-    // CollectionView methods
+    // TableView methods
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("mnemmals.count is: " + String(describing: mnemmals.count))
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mnemmals.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("CellForRowAt(): invoked")
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SubmissionFooterComTableViewCell", for: indexPath) as! SubmissionFooterComTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SubmissionFooterComTableViewCell") as! SubmissionFooterComTableViewCell
+
         cell.selectionStyle = .none
         cell.commentorNameLabel.text = self.mnemmals[indexPath.row].userName
         cell.commentDateTime.text = self.mnemmals[indexPath.row].time
@@ -41,7 +56,6 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         cell.commentView.layer.cornerRadius = 10.0
         cell.commentTextView.textContainer.lineFragmentPadding = 0
         cell.commentTextView.textContainerInset = .zero
-        
         if self.mnemmals[indexPath.row].fbId != "none" {
             let url = URL(string: "http://graph.facebook.com/\(self.mnemmals[indexPath.row].fbId)/picture?type=large")
             print(url!)
@@ -49,17 +63,15 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         } else {
             cell.commentorAvatar.image = UIImage(named: "Anon")
         }
-        
         if self.mnemmals[indexPath.row].liked {
             cell.likeButtonOutlet.setTitleColor(UIColor.darkText, for: .normal)
-            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             cell.likeButtonOutlet.setImage(UIImage(imageLiteralResourceName: "LikePressed"), for: .normal)
         } else {
             cell.likeButtonOutlet.setTitleColor(UIColor.darkGray, for: .normal)
-            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 15)
+            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             cell.likeButtonOutlet.setImage(UIImage(imageLiteralResourceName: "Like"), for: .normal)
         }
-        
         cell.commentButtonOutlet.setImage(UIImage(imageLiteralResourceName: "Comment"), for: .normal)
         cell.shareButtonOutlet.setImage(UIImage(imageLiteralResourceName: "Share"), for: .normal)
         cell.commentorAvatar.round(corners: .allCorners, radius: cell.commentorAvatar.bounds.width / 2)
@@ -97,7 +109,7 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
             self.mnemmals[indexPath!.row].liked = true
             cell.likesAmountLabel.text = "Likes: " + self.mnemmals[indexPath!.row].likesAmount
             cell.likeButtonOutlet.setTitleColor(UIColor.darkText, for: .normal)
-            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
+            cell.likeButtonOutlet.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
             cell.likeButtonOutlet.setImage(UIImage(imageLiteralResourceName: "LikePressed"), for: .normal)
         }
             submitCommentAsLiked(indexPath: indexPath!, liked: false)
@@ -109,7 +121,7 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
                 self.mnemmals[indexPath!.row].liked = false
                 cell.likesAmountLabel.text = "Likes: " + self.mnemmals[indexPath!.row].likesAmount
                 cell.likeButtonOutlet.setTitleColor(UIColor.darkGray, for: .normal)
-                cell.likeButtonOutlet.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+                cell.likeButtonOutlet.titleLabel?.font = UIFont.systemFont(ofSize: 13)
                 cell.likeButtonOutlet.setImage(UIImage(imageLiteralResourceName: "Like"), for: .normal)
         }
             submitCommentAsLiked(indexPath: indexPath!, liked: true)
@@ -150,7 +162,7 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         print("commentButtonAct(): indexPath is: " + String(describing: indexPath))
         if let mnemmal = self.mnemmals[indexPath!.row] as? Mnemmal {
             mnemmalOverlookDelegate.perform(mnemmal: mnemmal) } else {print("commentButtonAct(): error with subscripting object from mnemmal.array")}
-        tableView.visibleCells.forEach({ $0.heroID = "" })
+        tableView.visibleCells.forEach({ $0.heroID = nil }) 
         tableView.cellForRow(at: indexPath!)?.heroID = "mnemmal"
     }
     
@@ -163,6 +175,38 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         let content = self.mnemmals[indexPath!.row].userName + " wrote a text in Mnemmal app: \"" + self.mnemmals[indexPath!.row].content + "\""
         shareDelegate.shareContent(content: content)
         }
+    
+    // SegmentDelegate
+    
+    func sortMnemmals(option: Int) {
+        switch option {
+        case 0: self.mnemmals.sort { $0.time > $1.time }
+        tableView.visibleCells.forEach({ (cell) in
+            cell.heroID = nil
+            })
+        UIView.transition(with: tableView,
+                          duration: 0.35,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+        case 1: self.mnemmals.sort { Int($0.likesAmount)! > Int($1.likesAmount)! }
+        tableView.visibleCells.forEach({ (cell) in
+            cell.heroID = nil
+        })
+        UIView.transition(with: tableView,
+                          duration: 0.35,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+        case 2: self.mnemmals.sort { $0.comments.count > $1.comments.count }
+        tableView.visibleCells.forEach({ (cell) in
+            cell.heroID = nil
+        })
+        UIView.transition(with: tableView,
+                          duration: 0.35,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+        default: break
+        }
+    }
 
     override func awakeFromNib() {
         super.awakeFromNib()

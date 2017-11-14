@@ -38,6 +38,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     var dayForToday: Day?
     var wordToPass: Word?
     var wordIndexPath: IndexPath?
+    var summary: DailySummary?
 
     // - MARK: TableView methods
 
@@ -57,7 +58,9 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         cell1.contentTextView.text = dayForToday?.opener
         cell1.contentTextView.heroModifiers = [.translate()]
         cell1.contentTextView.layer.cornerRadius = 10.0
-        cell1.proceedButton.setTitle("Start", for: .normal)
+        if let title = dayForToday?.openerButton { cell1.proceedButton.setTitle(title, for: .normal) } else {
+            cell1.proceedButton.setTitle("Start", for: .normal)
+        }
         cell1.proceedButton.addTarget(self, action: #selector(goToContentSubmission), for: .touchUpInside)
         cell1.proceedButton.layer.cornerRadius = 10.0
         cell1.myView.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
@@ -90,6 +93,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         cell3.selectionStyle = .none
         cell3.bgImage.image = story?.image
         cell3.textView.text = dayForToday?.closer
+        cell3.baseView.layer.cornerRadius = 10.0
         cell3.firstOptionButton.layer.cornerRadius = 10.0
         cell3.firstOptionButton.setTitle(dayForToday?.closerOption0, for: .normal)
         cell3.firstOptionButton.tag = 1
@@ -110,7 +114,8 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         cell4.selectionStyle = .none
         cell4.mnemmalOverlookDelegate = self
         cell4.shareDelegate = self
-        cell4.mnemmals = self.mnemmals.reversed()
+        self.mnemmals.sort { $0.time > $1.time }
+        cell4.mnemmals = self.mnemmals
         cell4.completeButton.layer.cornerRadius = 10.0
         cell4.completeButton.addTarget(self, action: #selector(goToMainVC), for: .touchUpInside)
         cell4.myView.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
@@ -242,7 +247,8 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         print("goToMnemmals(): invoked")
         self.retrieveMnemmals()
         let option = String(sender.tag - 1)
-        updateStoryTrack(option)
+        self.updateStoryTrack(option)
+        self.submitDailySummary(option: option)
         self.tableView.selectRow(at: IndexPath(item: 5, section: 0), animated: true, scrollPosition: .bottom)
         self.closeOutlet.isHidden = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -269,12 +275,14 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         print("submitButtonAct(): invoked")
         self.view.endEditing(true)
         deleteFirstSpace()
-        submitMnemmal()
+        submitMnemmalAndDailySummary()()
         submitWordsAsUsed()
         increaseStoryLevel()
         fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, completedStatus: (self.story?.completed)!, indexPath: self.storyIndexPath!)
         goToCloser()
     }
+    
+    var mnemmalSent: Mnemmal?
     
     func submitMnemmal() {
         print("submitMnemmal(): invoked")
@@ -287,6 +295,8 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         let id = userId + ":" + storyId + ":" + storyTrack!
         let time = getCurrentTime()
         let content = cell.textView.text
+        let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack, time: time, likesAmount: "0", content: content, comments: nil, liked: false)
+        self.mnemmalSent = mnemmal
         let userRef = Database.database().reference().child("users/\(userId)/stories/\(storyId)/instances/\(storyTrack!)").childByAutoId()
         userRef.child("ID").setValue(id)
         userRef.child("userID").setValue(userId)
@@ -311,6 +321,28 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         let userRefForDate = Database.database().reference().child("users/\(userId)/stories/\(storyId)/lastDate")
         userRefForDate.setValue(getCurrentTime())
         print("submitMnemmal(): Mnemmal submitted for storyID: \(storyId)")
+    }
+
+    
+    func submitDailySummary(option: String) {
+        print("submitDailySummary(): invoked")
+        // submitting DailySummary
+        let summaryRef = Database.database().reference().child("users/\(self.user!.id)/stories/\(storyId)/summaries/\(storyTrack!)")
+        if let mnemmal = self.mnemmalSent {
+        summaryRef.child("ID").setValue(mnemmal.id)
+        summaryRef.child("storyTrack").setValue(mnemmal.storyTrack!)
+        summaryRef.child("title").setValue(self.dayForToday?.name)
+        summaryRef.child("opener").setValue(self.dayForToday?.opener)
+        summaryRef.child("mnemmalContent").setValue(mnemmal.content)
+        summaryRef.child("mnemmalDate").setValue(mnemmal.time)
+        summaryRef.child("closer").setValue(self.dayForToday.closer)
+        switch option {
+            case "0": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption0)
+            case "1": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption1)
+        default: break
+        print("submitDailySummary(): dailySummary has been submitted")
+        }
+    }
     }
     
     func getCurrentTime() -> String {
@@ -559,7 +591,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
             }
                 }
             })
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: 6, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals.reversed()
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: 6, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals
                 cell.tableView.reloadData() }
         })
         }

@@ -14,21 +14,18 @@ class MainCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var storyLabel: UILabel!
     
-    @IBOutlet weak var premium: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     
-    @IBOutlet weak var getButton: UIButton!
-    
-    @IBOutlet weak var dayNumLabel: UILabel!
-    
-    @IBOutlet weak var dayNumBG: UIImageView!
+    @IBOutlet weak var premium: UIImageView!
     
     @IBOutlet weak var removeButton: UIButton!
     
-    @IBOutlet weak var overviewButton: UIButton!
+    @IBOutlet weak var underliningView: UIView!
+        
+    @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
 }

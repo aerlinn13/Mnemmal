@@ -18,7 +18,8 @@ class SubmissionHeaderTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        proceedButton.titleLabel?.minimumScaleFactor = 0.5
+        proceedButton.titleLabel?.adjustsFontSizeToFitWidth = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

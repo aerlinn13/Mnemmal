@@ -43,6 +43,7 @@
 		838B0CB01F8CF4F100E52C7D /* SideMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 838B0CAE1F8CF4F000E52C7D /* SideMenuTableViewCell.xib */; };
 		839B41361F7A9A6A003B2B00 /* WordOverlookVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */; };
 		83AB73961FADCD3700235C1F /* MnemmalComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB73951FADCD3700235C1F /* MnemmalComment.swift */; };
+		83ABC05E1FBB1EBD000CF0D8 /* DailySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83ABC05D1FBB1EBD000CF0D8 /* DailySummary.swift */; };
 		83D0E84C1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D0E84A1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.swift */; };
 		83D0E84D1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83D0E84B1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.xib */; };
 		83D0E8501FA0BC7400319F68 /* StoryOverlookContentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D0E84E1FA0BC7400319F68 /* StoryOverlookContentTableViewCell.swift */; };
@@ -137,6 +138,7 @@
 		838B0CAE1F8CF4F000E52C7D /* SideMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SideMenuTableViewCell.xib; sourceTree = "<group>"; };
 		839B41351F7A9A6A003B2B00 /* WordOverlookVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordOverlookVC.swift; sourceTree = "<group>"; };
 		83AB73951FADCD3700235C1F /* MnemmalComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MnemmalComment.swift; sourceTree = "<group>"; };
+		83ABC05D1FBB1EBD000CF0D8 /* DailySummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailySummary.swift; sourceTree = "<group>"; };
 		83D0E84A1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryOverlookHeaderTableViewCell.swift; sourceTree = "<group>"; };
 		83D0E84B1FA0AB8800319F68 /* StoryOverlookHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoryOverlookHeaderTableViewCell.xib; sourceTree = "<group>"; };
 		83D0E84E1FA0BC7400319F68 /* StoryOverlookContentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryOverlookContentTableViewCell.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			isa = PBXGroup;
 			children = (
 				834E213E1F609C2A00BC8F21 /* Story.swift */,
+				83ABC05D1FBB1EBD000CF0D8 /* DailySummary.swift */,
 				834E21401F609E2D00BC8F21 /* Mnemmal.swift */,
 				83AB73951FADCD3700235C1F /* MnemmalComment.swift */,
 				832F806A1F939B2D007A53CF /* Day.swift */,
@@ -747,6 +750,7 @@
 				83ED981A1F94D3E000656F8E /* SummaryCloserTableViewCell.swift in Sources */,
 				83DCCBAA1FA7472F0014BD78 /* SubmissionHeaderTableViewCell.swift in Sources */,
 				83F18A9D1F6E79A400981A72 /* SubmissionVC.swift in Sources */,
+				83ABC05E1FBB1EBD000CF0D8 /* DailySummary.swift in Sources */,
 				83ED98121F94D32E00656F8E /* SummaryOpenerTableViewCell.swift in Sources */,
 				83138DF01FAB5AB800AE1D78 /* SubmissionFooterComTableViewCell.swift in Sources */,
 				839B41361F7A9A6A003B2B00 /* WordOverlookVC.swift in Sources */,

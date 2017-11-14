@@ -6,6 +6,7 @@
 //  Copyright © 2017 Danil Chernyshev. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import Firebase
 import FirebaseStorageUI
@@ -23,7 +24,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         return true
     }
     
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionViewUp: UICollectionView!
     @IBOutlet weak var collectionViewDown: UICollectionView!
     @IBOutlet weak var emptyDown: UIButton!
@@ -59,57 +59,59 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainCollectionViewCell", for: indexPath) as! MainCollectionViewCell
         cell.scrollingImage.layer.cornerRadius = 10.0
         cell.storyLabel.isHidden = false
-        cell.removeButton.isHidden = true
-        cell.overviewButton.isHidden = true
+        cell.scrollingImage.alpha = 1.0
+        cell.underliningView.isHidden = true
         
         if collectionView == collectionViewUp {
-        cell.dayNumLabel.isHidden = true
-        cell.dayNumBG.isHidden = true
+        
+        cell.removeButton.isHidden = true
+        cell.statusLabel.isHidden = true
+        cell.premium.isHidden = true
         cell.storyLabel.text = storiesForCollectionView[indexPath.row].title
-        let textColor = UIColor(hexString: "\(storiesForCollectionView[indexPath.row].titleColor)")
-        cell.storyLabel.textColor = textColor
         let imageRef = reference.child("\(storiesForCollectionView[indexPath.row].id).png")
         cell.scrollingImage.sd_setImage(with: imageRef, placeholderImage: placeholderImage)
-        // cell.getButton.addTarget(self, action: #selector(MainVC.getStory), for: .touchUpInside)
-        cell.getButton.heroID = "getButton"
-        cell.premium.heroID = "premium"
         cell.storyLabel.heroID = "cellTitle"
-        if storiesForCollectionView[indexPath.row].premium == true {
-            cell.premium.isHidden = false } else {
-            cell.premium.text = "for free"
+        if storiesForCollectionView[indexPath.row].premium {
+        cell.premium.isHidden = false
+        } else {
+            cell.premium.isHidden = true
             }
     }
-        else {
-            cell.scrollingImage.alpha = 1.0
-            cell.dayNumBG.isHidden = false
-            cell.dayNumLabel.isHidden = false
-            cell.premium.isHidden = true
-            cell.getButton.isHidden = true
-            cell.storyLabel.text = storiesAddedSource[indexPath.row].title
-            let textColor = UIColor(hexString: "\(storiesAddedSource[indexPath.row].titleColor)")
-            cell.storyLabel.textColor = textColor
-            print(storiesAddedSource[indexPath.row].storyLevel + "-  " + storiesAddedSource[indexPath.row].title + " - this is storyLevel - ReloadData()")
+        else { // CollectionViewDown
             
+            cell.removeButton.isHidden = true
+            cell.underliningView.isHidden = false
+            cell.premium.isHidden = true
+            cell.storyLabel.text = storiesAddedSource[indexPath.row].title
+            let storyLevel = Int(self.storiesAddedSource[indexPath.row].storyLevel)
+            cell.statusLabel.font = UIFont(name: "Palatino", size: 25.0)
+            cell.statusLabel.text = self.toRoman(number: storyLevel!)
+        
+            print("cellForRowAtItem(): intrinsicSize from statusLabel is: " + String(describing: cell.statusLabel.intrinsicContentSize.width))
+
+            cell.widthConstraint.constant = cell.statusLabel.intrinsicContentSize.width
+            cell.updateConstraints()
             let imageRef = reference.child("\(storiesAddedSource[indexPath.row].id).png")
             cell.scrollingImage.sd_setImage(with: imageRef, placeholderImage: placeholderImage)
             
+            cell.underliningView.backgroundColor = nil
+            print("cellForRowAtItem(): newDay is: " + String(self.storiesAddedSource[indexPath.row].title) + String(self.storiesAddedSource[indexPath.row].newDay))
             if storiesAddedSource[indexPath.row].completed == false {
-            cell.dayNumLabel.text = "DAY " + storiesAddedSource[indexPath.row].storyLevel
             if self.storiesAddedSource[indexPath.row].newDay { // newDay is true
-                cell.dayNumLabel.textColor = UIColor(red: 0/255.0, green: 180/255.0, blue: 0/255.0, alpha: 1)
+                cell.underliningView.backgroundColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
                 print("cellForRowAtItem(): this story has a new day: " + self.storiesAddedSource[indexPath.row].title)
             } else { // newDay is false
-                cell.dayNumLabel.textColor = UIColor.lightGray
+                cell.underliningView.backgroundColor = UIColor.lightGray
                 print("cellForRowAtItem(): this story has no new days: " + self.storiesAddedSource[indexPath.row].title)
             }
             } else { // completed is true
                 print("cellForRowAtItem(): this story is DONE: " + self.storiesAddedSource[indexPath.row].title)
                 self.storiesAddedSource[indexPath.row].newDay = false
-                cell.dayNumLabel.text = "DONE"
-                cell.scrollingImage.alpha = 0.5
-                cell.dayNumLabel.textColor = UIColor.darkText
+                cell.underliningView.backgroundColor = UIColor.black
             }
+            
     }
+        cell.layoutIfNeeded()
         return cell
     }
     
@@ -159,6 +161,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         let date = Date()
         formatter.dateFormat = "MMM dd, yyyy"
         let stringDate: String = formatter.string(from: date)
+        print(stringDate)
         return stringDate
     }
     
@@ -217,9 +220,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         HUD.show(.progress)
         print("retrievingAllStories()")
         self.storiesForCollectionView.removeAll()
-        self.emptyUpLabel.isHidden = true
-        self.activityIndicator.isHidden = false
-        self.activityIndicator.startAnimating() // LOADER START
         let storiesRef = Database.database().reference().child("stories")
         storiesRef.keepSynced(true)
         storiesRef.observeSingleEvent(of: .value, with: { snapshot in
@@ -242,7 +242,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                     let premium = snap.childSnapshot(forPath: "premium").value as! Bool
                     let firstParty = snap.childSnapshot(forPath: "firstParty").value as! String
                     let secondParty = snap.childSnapshot(forPath: "secondParty").value as! String
-                        let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, words: words, subtext: subtext, epigraph: epigraph, premium: premium, titleColor: titleColor, wordsColor: "grey", hidden: false, firstParty: firstParty, secondParty: secondParty)
+                    let story = Story(isActive: isActive, title: title, daysAmount: daysAmount, id: id, genre: genre, words: words, subtext: subtext, epigraph: epigraph, premium: premium, titleColor: titleColor, wordsColor: "grey", hidden: false, firstParty: firstParty, secondParty: secondParty, summaries: nil)
                 self.storiesForCollectionView.append(story)
                     } else { print("retrieveAllStories(): story is inactive") }
                     print("retrieveAllStories(): Amount of stories in upper CollectionView is " + String(self.storiesForCollectionView.count))
@@ -306,10 +306,11 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                         let name = snap.childSnapshot(forPath: "name").value as! String
                         let historical = snap.childSnapshot(forPath: "historical").value as! Bool
                         let opener = snap.childSnapshot(forPath: "opener").value as! String
+                        let openerButton = snap.childSnapshot(forPath: "openerButton").value as? String
                         let closer = snap.childSnapshot(forPath: "closer").value as! String
                         let closerOption0 = snap.childSnapshot(forPath: "closerOption0").value as! String
                         let closerOption1 = snap.childSnapshot(forPath: "closerOption1").value as? String
-                        let day = Day(coding: coding, name: name, opener: opener, historical: historical, closer: closer, closerOption0: closerOption0, closerOption1: closerOption1)
+                        let day = Day(coding: coding, name: name, opener: opener, openerButton: openerButton, historical: historical, closer: closer, closerOption0: closerOption0, closerOption1: closerOption1)
                         story.days[coding] = day
                         print("loadDaysForStories(): New day has been added for story. Amount of days is " + String(describing: story.days.count))
         }
@@ -419,7 +420,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         })
         }
         retrievingUserStories(withFetchingStories: withFetchingStories)
-        self.activityIndicator.stopAnimating()
         } else { print("fetchWordsForStories(): UpperSource is empty")}
     }
 
@@ -433,12 +433,14 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     story.lastDate = lastDate
     if lastDate != self.getCurrentDate() {
             story.newDay = true
-        } else { story.newDay = false }
-        print("getLastDatesForStories(): last Date for Story  is  " + lastDate) }
+        }
+    else { story.newDay = false }
+        print("getLastDatesForStories(): last Date for Story \(story.title) is: " + lastDate) }
     else { print("getLastDatesForStories(): No last dates for story \(story.title)")}
-        self.moveAvailableStoriesAtTop()
+    self.moveAvailableStoriesAtTop()
     })
         }
+        
     }
     
     // Moving stories from up to down
@@ -452,7 +454,9 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         print("fetchStories(): self.storiesForCollectionView.count is: "
             + String(self.storiesForCollectionView.count))
         self.collectionViewUp.reloadData()
-        getCurrentLevelsForStoriesAdded()
+        self.getCurrentLevelsForStoriesAdded()
+        self.getLastDatesForStories()
+        self.retrieveSummariesForStories()
         checkVisibilityOfUIElements()
         HUD.flash(.success)
     }
@@ -466,32 +470,58 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
                 let level = snapshot.childSnapshot(forPath: "\(story.id)").value as! String
                 story.storyLevel = level
                 print("getCurrentLevelsForStoriesAdded(): Level for story " + story.title + " is " + String(describing: level)) }
-            self.getLastDatesForStories()
-            self.activityIndicator.isHidden = true
         })
     }
     
-    
+    func retrieveSummariesForStories() {
+        print("retrieveSummariesForStories() is invoked")
+        self.storiesAddedSource.forEach({ (story) in
+            let storyId = story.id
+            let storyTrack = self.user.storyTrack[storyId]
+            let summaryRef = Database.database().reference().child("users/\(self.user.id!)/stories/\(storyId)/summaries/\(storyTrack)")
+            summaryRef.keepSynced(true)
+            summaryRef.observeSingleEvent(of: .value, with: { snapshot in
+                if snapshot.exists() {
+                let id = snapshot.childSnapshot(forPath: "ID").value as! String
+                let storyTrack = snapshot.childSnapshot(forPath: "storyTrack").value as! String
+                let title = snapshot.childSnapshot(forPath: "title").value as! String
+                let opener = snapshot.childSnapshot(forPath: "opener").value as! String
+                let mnemmalContent = snapshot.childSnapshot(forPath: "mnemmalContent").value as! String
+                let mnemmalDate = snapshot.childSnapshot(forPath: "mnemmalDate").value as! String
+                let closer = snapshot.childSnapshot(forPath: "closer").value as! String
+                let chosenOption = snapshot.childSnapshot(forPath: "chosenOption").value as! String
+                let summary = DailySummary(id: id, storyTrack: storyTrack, title: title, opener: opener, mnemmalContent: mnemmalContent, mnemmalDate: mnemmalDate, closer: closer, chosenOption: chosenOption)
+                story.summaries[storyTrack] = summary
+                }
+            })
+        })
+    }
     
     // - MARK: Adding and removal story to User
     
-    @objc func getStory() {
+    func getStory(initialStoryTrack: String) {
         print("getStory() is invoked")
         if let visibility = self.getIndexForVisibleCell(collectionViewUp) {
+            self.user.storyTrack[self.storiesForCollectionView[visibility.row].id] = initialStoryTrack
+            setInitialStoryTrack(story: self.storiesForCollectionView[visibility.row], storyTrack: initialStoryTrack)
+            
             self.storiesAddedSource.insert(self.storiesForCollectionView[visibility.row], at: 0)
             let storyRefToUpdateUserAccount = self.storiesForCollectionView[visibility.row].id
             self.user.storiesActive!.append(storyRefToUpdateUserAccount)
-            self.collectionViewDown.insertItems(at: [IndexPath(item: 0, section: 0)])
-            self.collectionViewDown.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
             self.storiesForCollectionView.remove(at: visibility.item)
+            self.collectionViewUp.reloadData()
             if self.storiesForCollectionView.count == 0 { self.stopTimer() }
-            self.collectionViewUp.deleteItems(at: [visibility])
             setCurrentDayForNewStory(storyRefToUpdateUserAccount)
             self.storiesAddedSource[0].newDay = true
             checkVisibilityOfUIElements()
-            animateReloading(collectionViewDown)
         }
     }
+    
+    func setInitialStoryTrack(story: Story, storyTrack: String) {
+        let storyTrackRef = Database.database().reference().child("users/\(self.user.id!)/stories/\(story.id)/storyTrack")
+        storyTrackRef.setValue(storyTrack)
+    }
+    
     
     func setCurrentDayForNewStory(_ source: String) {
         let daysRef = Database.database().reference().child("users/\(self.user.id!)/storyRefs/\(source)/")
@@ -516,6 +546,7 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         wordsRef.removeValue()
         print("removeStory(): Info removed")
         checkVisibilityOfUIElements()
+        scrollToCenter(array: self.storiesForCollectionView, collectionView: self.collectionViewUp)
         removeUserMnemmalsFromCommonPool(indexPath: indexPath)
     }
     
@@ -576,7 +607,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             self.retrievingAllStories()
         }
     }
-    
     
     
     
@@ -662,14 +692,10 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
             if let cell = self.collectionViewDown.cellForItem(at: indexPath) as? MainCollectionViewCell {
             self.storyToPass = self.storiesAddedSource[indexPath.row]
             self.storyIndexPath = indexPath
-            cell.scrollingImage.alpha = 0.7
-            cell.dayNumBG.isHidden = true
-            cell.dayNumLabel.isHidden = true
-            cell.removeButton.addTarget(self, action: #selector(remove), for: .touchUpInside)
+            cell.scrollingImage.alpha = 0.5
             cell.removeButton.isHidden = false
-            cell.overviewButton.addTarget(self, action: Selector("summarySegue"), for: .touchUpInside)
+            cell.removeButton.addTarget(self, action: Selector("remove"), for: .touchUpInside)
             self.storiesAddedSource[indexPath.row].image = cell.scrollingImage.image!
-            cell.overviewButton.isHidden = false
             indexPathRemoval = indexPath
             storyIdRemoval = self.storiesAddedSource[indexPath.row].id
         } else {
@@ -721,12 +747,47 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         }
     }
     
-    func scrollToCenter() {
+    func scrollToCenter(array: Array<Story>, collectionView: UICollectionView) {
         print("scrollToCenter(): invoked")
-        if storiesForCollectionView.count != 0 {
-        collectionViewUp.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
-        x = 0
+        if collectionView == collectionViewUp {
+        if array.count != 0 {
+        collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .centeredHorizontally, animated: true)
+        self.x = 0
         }
+        } else {
+        if array.count != 0 {
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+            self.x = 0
+        }
+    }
+    }
+    
+    func toRoman(number: Int) -> String {
+        
+        let romanValues = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"]
+        let arabicValues = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+        
+        var romanValue = ""
+        var startingValue = number
+        
+        for (index, romanChar) in romanValues.enumerated() {
+            var arabicValue = arabicValues[index]
+            
+            var div = startingValue / arabicValue
+            
+            if (div > 0)
+            {
+                for j in 0..<div
+                {
+                    //println("Should add \(romanChar) to string")
+                    romanValue += romanChar
+                }
+                
+                startingValue -= arabicValue * div
+            }
+        }
+        
+        return romanValue
     }
     
     // - MARK: VC LifeCycle
@@ -734,7 +795,12 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         Database.database().isPersistenceEnabled = true
-
+        
+        self.emptyUp.isHidden = true
+        self.emptyUpLabel.isHidden = true
+        self.emptyDown.isHidden = true
+        self.emptyDownLabel.isHidden = true
+        
         let nib = UINib(nibName: "MainCollectionViewCell", bundle: nil)
         collectionViewUp.register(nib, forCellWithReuseIdentifier: "MainCollectionViewCell")
         collectionViewDown.register(nib, forCellWithReuseIdentifier: "MainCollectionViewCell")
@@ -772,9 +838,6 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         // SideMenu
         setupSideMenu()
         
-        // Activity Indicator
-        self.activityIndicator.isHidden = true
-        
         // Notifications
         NotificationCenter.default.addObserver(self,
                                             selector: #selector(updateUserObject),
@@ -786,19 +849,16 @@ class MainVC: UIViewController, UICollectionViewDelegate, UICollectionViewDataSo
         collectionViewDown.addGestureRecognizer(longGest)
         collectionViewDown.backgroundView?.isUserInteractionEnabled = false
         }
-    
 
     
     override func viewDidAppear(_ animated: Bool) {
-        scrollToCenter()
+        moveAvailableStoriesAtTop()
+        self.scrollToCenter(array: storiesForCollectionView, collectionView: collectionViewUp)
+        self.scrollToCenter(array: storiesAddedSource, collectionView: collectionViewDown)
         loadStoryTracks(initial: false)
         setTimer()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        moveAvailableStoriesAtTop()
-    }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         stopTimer()
     }

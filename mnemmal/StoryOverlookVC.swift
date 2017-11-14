@@ -38,30 +38,24 @@ class StoryOverlookVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell0 = tableView.dequeueReusableCell(withIdentifier: "StoryOverlookHeaderTableViewCell") as! StoryOverlookHeaderTableViewCell
         cell0.headerImage.image = story?.image
         cell0.headerImage.heroID = "cellImage"
         cell0.headerLabel.text = story?.title
         cell0.headerLabel.heroID = "cellTitle"
-        if (story?.premium)! {
-        if user?.status == "premium" {
-            cell0.premium.text = "for free"
-        } else {
-            cell0.premium.text = "premium story"
-        }
-        } else {
-            cell0.premium.text = "for free"
-        }
-        cell0.getButton.addTarget(self, action: #selector(self.getStory), for: .touchUpInside)
-        cell0.getButton.heroID = "getButton"
-        cell0.premium.heroID = "premium"
         cell0.layoutIfNeeded()
+        
         let cell1 = tableView.dequeueReusableCell(withIdentifier: "StoryOverlookContentTableViewCell") as! StoryOverlookContentTableViewCell
         cell1.textField.text = story?.subtext
         cell1.epigraph.text = story?.epigraph
         cell1.firstPartyButton.setTitle(story?.firstParty, for: .normal)
+        cell1.firstPartyButton.addTarget(self, action: #selector(getStory(sender:)), for: .touchUpInside)
+        cell1.firstPartyButton.tag = 1
         cell1.secondPartyButton.setTitle(story?.secondParty, for: .normal)
-        cell1.choosePartyLabel.text  = ""
+        cell1.secondPartyButton.addTarget(self, action: #selector(getStory(sender:)), for: .touchUpInside)
+        cell1.secondPartyButton.tag = 2
+        cell1.choosePartyLabel.text  = "Please choose a hero that you want to start your story with."
         
         if indexPath.row == 0 { return cell0 }
         else if indexPath.row == 1 { return cell1 } else { return cell0 }
@@ -75,9 +69,9 @@ class StoryOverlookVC: UIViewController, UITableViewDelegate, UITableViewDataSou
         return size
     }
     
-    func getStory() {
-        delegate.getStory()
-        delegate.scrollToCenter()
+    @objc func getStory(sender: UIButton!) {
+        let initialStoryTrack = String(describing: sender.tag - 1)
+        delegate.getStory(initialStoryTrack: initialStoryTrack)
         self.dismiss(animated: true, completion: nil)
     }
     

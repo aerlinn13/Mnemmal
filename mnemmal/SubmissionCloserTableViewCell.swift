@@ -11,6 +11,7 @@ import UIKit
 class SubmissionCloserTableViewCell: UITableViewCell {
 
     
+    @IBOutlet weak var baseView: UIView!
     @IBOutlet weak var myView: UIView!
     @IBOutlet weak var bgImage: UIImageView!
     @IBOutlet weak var textView: UITextView!
@@ -20,7 +21,11 @@ class SubmissionCloserTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        firstOptionButton.titleLabel?.minimumScaleFactor = 0.5
+        firstOptionButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        
+        secondOptionButton.titleLabel?.minimumScaleFactor = 0.5
+        secondOptionButton.titleLabel?.adjustsFontSizeToFitWidth = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

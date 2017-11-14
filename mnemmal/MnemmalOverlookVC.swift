@@ -12,8 +12,7 @@ import Firebase
 import SwipeCellKit
 
 class MnemmalOverlookTVC: UITableViewController, UITextViewDelegate, SwipeTableViewCellDelegate {
-    
-    
+
 
     // - MARK: Variables
     

@@ -338,9 +338,6 @@ Add new one or tap to login with Facebook.</string>
                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="c6S-Nk-Rf9">
-                                <rect key="frame" x="177.5" y="65" width="20" height="30"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -367,12 +364,9 @@ Add new one or tap to login with Facebook.</string>
                             <constraint firstItem="Sdh-pP-q4x" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="ezf-Eh-pe1"/>
                             <constraint firstItem="vM2-IR-QLW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="45" id="fGB-1T-oaj"/>
                             <constraint firstAttribute="trailing" secondItem="yyu-Up-F8Q" secondAttribute="trailing" id="iHx-DN-Sry"/>
-                            <constraint firstItem="c6S-Nk-Rf9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="j67-U1-VOR"/>
                             <constraint firstAttribute="trailing" secondItem="FdF-t4-5NC" secondAttribute="trailing" id="lp1-aI-pEi"/>
                             <constraint firstItem="kVS-j9-wg4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="10" id="prU-0c-3lE"/>
-                            <constraint firstItem="yyu-Up-F8Q" firstAttribute="bottom" secondItem="c6S-Nk-Rf9" secondAttribute="bottom" constant="55" id="rTT-oz-Bn3"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="a0a-ns-0id" secondAttribute="bottom" id="sfV-FI-ELi"/>
-                            <constraint firstItem="c6S-Nk-Rf9" firstAttribute="top" secondItem="yyu-Up-F8Q" secondAttribute="top" constant="55" id="ubF-dF-Rlp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rU5-VL-2fU"/>
@@ -384,8 +378,6 @@ Add new one or tap to login with Facebook.</string>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="EmptyDownLabel" destination="NZb-9c-M53" id="4Qu-em-3W3"/>
-                        <outlet property="EmptyUpLabel" destination="vM2-IR-QLW" id="Tb6-cB-JcE"/>
-                        <outlet property="activityIndicator" destination="c6S-Nk-Rf9" id="q39-06-qKT"/>
                         <outlet property="blankView" destination="FdF-t4-5NC" id="ogB-30-9SN"/>
                         <outlet property="collectionViewDown" destination="a0a-ns-0id" id="N2J-Gq-cCe"/>
                         <outlet property="collectionViewUp" destination="yyu-Up-F8Q" id="upZ-7D-fUf"/>

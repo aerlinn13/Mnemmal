@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -29,28 +28,6 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="5Vg-B7-Az0">
-                        <rect key="frame" x="242" y="270.5" width="60" height="36"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gvP-fE-atm">
-                                <rect key="frame" x="0.0" y="0.0" width="60" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="9c9-52-p9N"/>
-                                    <constraint firstAttribute="height" constant="25" id="qt8-Dp-7sp"/>
-                                </constraints>
-                                <state key="normal" image="getButton"/>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Premium story" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oWF-fa-6uT">
-                                <rect key="frame" x="0.0" y="28" width="60" height="8"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="8" id="zf2-AD-I5B"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="8"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                    </stackView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="sbH-CS-rh9" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="3L9-u9-T85"/>
@@ -59,21 +36,16 @@
                     <constraint firstItem="sbH-CS-rh9" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="DqV-99-FAu"/>
                     <constraint firstItem="YCc-Kv-ZCB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="OZG-Ho-J8o"/>
                     <constraint firstItem="YCc-Kv-ZCB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="TaB-Tv-Zh8"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="5Vg-B7-Az0" secondAttribute="trailing" constant="10" id="V4E-2x-y05"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="5Vg-B7-Az0" secondAttribute="bottom" constant="5" id="vDj-CH-Bgi"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="getButton" destination="gvP-fE-atm" id="XzJ-bW-cw2"/>
                 <outlet property="headerImage" destination="YCc-Kv-ZCB" id="iqb-Mh-oUN"/>
                 <outlet property="headerLabel" destination="sbH-CS-rh9" id="yKj-sc-Aca"/>
-                <outlet property="premium" destination="oWF-fa-6uT" id="TYs-pI-Mka"/>
             </connections>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="getButton" width="90" height="38"/>
-        <image name="placeholder" width="1170" height="420"/>
+        <image name="placeholder" width="333" height="222"/>
     </resources>
 </document>

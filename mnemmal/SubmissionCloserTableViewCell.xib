@@ -39,7 +39,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z5A-Tn-yQA">
-                                <rect key="frame" x="16" y="70" width="382" height="387.5"/>
+                                <rect key="frame" x="16" y="50" width="382" height="407.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -69,7 +69,7 @@
                             <constraint firstAttribute="bottomMargin" secondItem="dae-Q6-Lir" secondAttribute="bottom" constant="20" id="8gg-8f-bDO"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dae-Q6-Lir" secondAttribute="trailing" constant="8" id="BXm-S5-WkG"/>
                             <constraint firstAttribute="trailing" secondItem="wCa-vj-F9J" secondAttribute="trailing" id="CtX-rf-Cfc"/>
-                            <constraint firstItem="z5A-Tn-yQA" firstAttribute="top" secondItem="wCa-vj-F9J" secondAttribute="bottom" constant="10" id="EeD-gP-7Us"/>
+                            <constraint firstItem="z5A-Tn-yQA" firstAttribute="top" secondItem="wCa-vj-F9J" secondAttribute="bottom" constant="-10" id="EeD-gP-7Us"/>
                             <constraint firstItem="z5A-Tn-yQA" firstAttribute="leading" secondItem="r6x-yC-Vyy" secondAttribute="leadingMargin" constant="8" id="GfL-i0-gg0"/>
                             <constraint firstAttribute="trailingMargin" secondItem="z5A-Tn-yQA" secondAttribute="trailing" constant="8" id="IG4-XZ-ucp"/>
                             <constraint firstItem="wCa-vj-F9J" firstAttribute="top" secondItem="r6x-yC-Vyy" secondAttribute="top" id="L5i-lK-eeo"/>
@@ -94,6 +94,7 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="baseView" destination="DyR-qu-eS0" id="RYp-SJ-bvz"/>
                 <outlet property="bgImage" destination="wCa-vj-F9J" id="9EI-IV-6tg"/>
                 <outlet property="firstOptionButton" destination="dae-Q6-Lir" id="9K9-ij-otq"/>
                 <outlet property="myView" destination="r6x-yC-Vyy" id="pFQ-hZ-mA0"/>

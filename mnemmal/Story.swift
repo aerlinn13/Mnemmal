@@ -26,12 +26,13 @@ class Story {
     var image = UIImage()
     var wordsObj: Array<Word>?
     var lastDate: String?
-    var newDay: Bool = false
+    var newDay: Bool = true
     var coding: String?
     var days: Dictionary<String, Day> = [String: Day]()
     var completed: Bool = false
     var firstParty: String?
     var secondParty: String?
+    var summaries: Dictionary<String,DailySummary> = [String: DailySummary]()
     
     init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, epigraph: String, premium: Bool, titleColor: String, wordsColor: String, hidden: Bool, firstParty: String, secondParty: String) {
         self.isActive = isActive

@@ -32,6 +32,12 @@ class SubmissionFooterComTableViewCell: UITableViewCell {
         likeButtonOutlet.imageView?.contentMode = .scaleAspectFit
         commentButtonOutlet.imageView?.contentMode = .scaleAspectFit
         shareButtonOutlet.imageView?.contentMode = .scaleAspectFit
+        likeButtonOutlet.titleLabel?.minimumScaleFactor = 0.5
+        likeButtonOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
+        commentButtonOutlet.titleLabel?.minimumScaleFactor = 0.5
+        commentButtonOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
+        shareButtonOutlet.titleLabel?.minimumScaleFactor = 0.5
+        shareButtonOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
 
         // Initialization code
     }

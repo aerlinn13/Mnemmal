@@ -10,8 +10,6 @@ import UIKit
 
 class StoryOverlookHeaderTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var getButton: UIButton!
-    @IBOutlet weak var premium: UILabel!
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var headerImage: UIImageView!
     
