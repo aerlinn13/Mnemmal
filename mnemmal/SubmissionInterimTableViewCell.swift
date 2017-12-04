@@ -12,6 +12,9 @@ class SubmissionInterimTableViewCell: UITableViewCell {
 
     @IBOutlet weak var interimImage: UIImageView!
     
+    @IBOutlet weak var mnemmalDone: UIImageView!
+    
+    @IBOutlet weak var successLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

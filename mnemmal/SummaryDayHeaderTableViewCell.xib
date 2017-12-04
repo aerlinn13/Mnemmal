@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13770" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13770"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SummaryDayHeaderTableViewCell" id="KGk-i7-Jjw" customClass="SummaryDayHeaderTableViewCell" customModule="mnemmal" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="415" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="415" height="39.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KOi-lb-Akr">
+                        <rect key="frame" x="10" y="0.0" width="395" height="29.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Day 1. Story begins" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="QYi-5p-NUg">
+                                <rect key="frame" x="1" y="1" width="393" height="27.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="Del-JD-kwp"/>
+                            <constraint firstItem="QYi-5p-NUg" firstAttribute="centerX" secondItem="KOi-lb-Akr" secondAttribute="centerX" id="LwX-zJ-tbf"/>
+                            <constraint firstItem="QYi-5p-NUg" firstAttribute="top" secondItem="KOi-lb-Akr" secondAttribute="top" constant="1" id="MWs-tt-ZTB"/>
+                            <constraint firstAttribute="bottom" secondItem="QYi-5p-NUg" secondAttribute="bottom" constant="1" id="ZrA-vg-HEf"/>
+                            <constraint firstAttribute="trailing" secondItem="QYi-5p-NUg" secondAttribute="trailing" constant="1" id="hXN-kd-sAG"/>
+                            <constraint firstItem="QYi-5p-NUg" firstAttribute="centerY" secondItem="KOi-lb-Akr" secondAttribute="centerY" id="pKY-i9-E4f"/>
+                            <constraint firstItem="QYi-5p-NUg" firstAttribute="leading" secondItem="KOi-lb-Akr" secondAttribute="leading" constant="1" id="scV-2I-gGq"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="KOi-lb-Akr" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="JT8-5X-SJo"/>
+                    <constraint firstAttribute="trailing" secondItem="KOi-lb-Akr" secondAttribute="trailing" constant="10" id="Sie-FG-Umo"/>
+                    <constraint firstAttribute="bottom" secondItem="KOi-lb-Akr" secondAttribute="bottom" constant="10" id="UiV-dq-GLg"/>
+                    <constraint firstItem="KOi-lb-Akr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="iLM-gL-mQK"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="baseView" destination="KOi-lb-Akr" id="Olp-Io-ja0"/>
+                <outlet property="dayLabel" destination="QYi-5p-NUg" id="xh4-aC-ca0"/>
+            </connections>
+            <point key="canvasLocation" x="71.5" y="30"/>
+        </tableViewCell>
+    </objects>
+</document>

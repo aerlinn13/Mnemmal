@@ -15,18 +15,19 @@ class DailySummary: NSObject {
     let opener: String?
     let mnemmalContent: String?
     let mnemmalDate: String?
-    let closer: String?
-    let chosenOption: String?
+    var wordsObj: Array<Word>?
+    var comments = Array<MnemmalComment>()
+    var commentsChecked = false
+    var likesAmount = 0
     
-    init(id: String, storyTrack: String, title: String, opener: String, mnemmalContent: String, mnemmalDate: String, closer: String, chosenOption: String) {
+    init(id: String, storyTrack: String, title: String, opener: String, mnemmalContent: String, mnemmalDate: String, wordsObj: Array<Word>) {
         self.id = id
         self.storyTrack = storyTrack
         self.title = title
         self.opener = opener
         self.mnemmalContent = mnemmalContent
         self.mnemmalDate = mnemmalDate
-        self.closer = closer
-        self.chosenOption = chosenOption
+        self.wordsObj = wordsObj
     }
 }
 

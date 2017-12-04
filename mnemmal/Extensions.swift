@@ -155,3 +155,8 @@ extension UIView {
     }
 }
 
+extension String {
+    func size(OfFont font: UIFont) -> CGSize {
+        return (self as NSString).size(withAttributes: [NSAttributedStringKey.font: font])
+    }
+}

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13770" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13770"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -29,8 +29,8 @@
                                     <constraint firstAttribute="width" secondItem="zYq-4u-x7v" secondAttribute="height" multiplier="2:1" id="AkY-It-h6Z"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vfp-AP-RBE">
-                                <rect key="frame" x="179" y="90.5" width="55" height="26.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Vfp-AP-RBE">
+                                <rect key="frame" x="179.5" y="91" width="55" height="26.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -80,11 +80,11 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="contentTextView" destination="AaU-3I-dKv" id="Oca-8f-wb0"/>
-                <outlet property="headerLabel" destination="Vfp-AP-RBE" id="qid-nV-eyt"/>
-                <outlet property="myView" destination="ADq-4q-Kl2" id="UCx-lc-Vdt"/>
-                <outlet property="proceedButton" destination="hM4-xM-5Ie" id="XKT-WV-HYx"/>
-                <outlet property="scrollingImage" destination="zYq-4u-x7v" id="1W7-Xl-EEu"/>
+                <outlet property="contentTextView" destination="AaU-3I-dKv" id="NFs-Ut-cxG"/>
+                <outlet property="headerLabel" destination="Vfp-AP-RBE" id="WLO-N1-91J"/>
+                <outlet property="myView" destination="ADq-4q-Kl2" id="gCc-aM-k4C"/>
+                <outlet property="proceedButton" destination="hM4-xM-5Ie" id="GZA-zQ-1Iz"/>
+                <outlet property="scrollingImage" destination="zYq-4u-x7v" id="OpD-Ro-lx1"/>
             </connections>
         </tableViewCell>
     </objects>

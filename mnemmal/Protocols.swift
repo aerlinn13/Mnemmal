@@ -14,7 +14,11 @@ protocol WordDelegate {
 }
 
 protocol FetchWordsAfterSubmissionDelegate {
-    func fetchWordsAfterSubmission(storyLevel: String, completedStatus: Bool, indexPath: IndexPath)
+    func fetchWordsAfterSubmission(storyLevel: String, completedStatus: Bool, indexPath: IndexPath, isNews: Bool)
+    func loadSummariesForStoriesDown()
+    func addSummaryForStory(summary: DailySummary)
+    func updateStoryTrack(track: String, storyId: String)
+    func getStory(initialStoryTrack: String, fromSubmission: Bool)
 }
 
 protocol StoryRemovalDelegate {
@@ -26,11 +30,13 @@ protocol UserUpdatedDelegate {
 }
 
 protocol GetStoryDelegate {
-    func getStory(initialStoryTrack: String)
+    func getStory(initialStoryTrack: String, fromSubmission: Bool)
+    var user: User { get set }
 }
 
 protocol WordCollectionDelegate {
     func performWordOutlook(indexPath: IndexPath)
+    func performWordOutlook(word: Word)
 }
 
 protocol  CommentsDelegate {

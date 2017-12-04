@@ -26,7 +26,6 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         }
     }
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var completeButton: UIButton!
     @IBOutlet weak var myView: UIView!
     var mnemmals = [Mnemmal]()
     var mnemmalOverlookDelegate: MnemmalOverlookDelegate!
@@ -46,7 +45,8 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("CellForRowAt(): invoked")
         let cell = tableView.dequeueReusableCell(withIdentifier: "SubmissionFooterComTableViewCell") as! SubmissionFooterComTableViewCell
-
+        cell.commentsAmountLabel.text = nil
+        cell.likesAmountLabel.text = nil
         cell.selectionStyle = .none
         cell.commentorNameLabel.text = self.mnemmals[indexPath.row].userName
         cell.commentDateTime.text = self.mnemmals[indexPath.row].time
@@ -82,17 +82,10 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         return cell
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let footer = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 80))
-        return footer
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 80
-    }
     
     
-    func likeButtonAct(sender: UIButton!) {
+    
+    @objc func likeButtonAct(sender: UIButton!) {
         print("likeButtonAct(): invoked")
         let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
@@ -155,19 +148,19 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         }
     }
     
-    func commentButtonAct(sender: UIButton!) {
+    @objc func commentButtonAct(sender: UIButton!) {
         print("commentButtonAct(): invoked")
         let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
         print("commentButtonAct(): indexPath is: " + String(describing: indexPath))
         if let mnemmal = self.mnemmals[indexPath!.row] as? Mnemmal {
-            mnemmalOverlookDelegate.perform(mnemmal: mnemmal) } else {print("commentButtonAct(): error with subscripting object from mnemmal.array")}
+        mnemmalOverlookDelegate.perform(mnemmal: mnemmal) } else { print("commentButtonAct(): error with subscripting object from mnemmal.array") }
         tableView.visibleCells.forEach({ $0.heroID = nil }) 
         tableView.cellForRow(at: indexPath!)?.heroID = "mnemmal"
     }
     
     
-    func shareButtonAct(sender: UIButton!) {
+    @objc func shareButtonAct(sender: UIButton!) {
         print("shareButtonAct(): invoked")
         let buttonPosition = sender.convert(CGPoint.zero, to: self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
@@ -187,7 +180,9 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         UIView.transition(with: tableView,
                           duration: 0.35,
                           options: .transitionCrossDissolve,
-                          animations: { self.tableView.reloadData() })
+                          animations: { self.tableView.reloadData()
+                            self.tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        })
         case 1: self.mnemmals.sort { Int($0.likesAmount)! > Int($1.likesAmount)! }
         tableView.visibleCells.forEach({ (cell) in
             cell.heroID = nil
@@ -195,7 +190,10 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         UIView.transition(with: tableView,
                           duration: 0.35,
                           options: .transitionCrossDissolve,
-                          animations: { self.tableView.reloadData() })
+                          animations: { self.tableView.reloadData()
+                            self.tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+
+        })
         case 2: self.mnemmals.sort { $0.comments.count > $1.comments.count }
         tableView.visibleCells.forEach({ (cell) in
             cell.heroID = nil
@@ -203,7 +201,10 @@ class SubmissionFooterTableViewCell: UITableViewCell, UITableViewDelegate, UITab
         UIView.transition(with: tableView,
                           duration: 0.35,
                           options: .transitionCrossDissolve,
-                          animations: { self.tableView.reloadData() })
+                          animations: { self.tableView.reloadData()
+                            self.tableView.scrollToRow(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+
+        })
         default: break
         }
     }

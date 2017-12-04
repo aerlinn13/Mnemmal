@@ -40,7 +40,7 @@ class WordOverlookVC: UIViewController {
     func setUpVC() {
         titleLabel.text = word?.title
         def.text = word?.definition
-        examples.text = self.word!.example0 + " \n" + self.word!.example1
+        examples.text = self.word!.example0 + " \n\n" + self.word!.example1
         cancelOutlet.layer.cornerRadius = 10.0
         insertOutlet.layer.cornerRadius = 10.0
     }

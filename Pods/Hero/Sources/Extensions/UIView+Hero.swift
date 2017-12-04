@@ -22,11 +22,30 @@
 
 import UIKit
 
+class SnapshotWrapperView: UIView {
+  let contentView: UIView
+  init(contentView: UIView) {
+    self.contentView = contentView
+    super.init(frame: contentView.frame)
+    addSubview(contentView)
+  }
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    contentView.bounds.size = bounds.size
+    contentView.center = bounds.center
+  }
+}
+
 public extension UIView {
   private struct AssociatedKeys {
     static var heroID    = "heroID"
     static var heroModifiers = "heroModifers"
     static var heroStoredAlpha = "heroStoredAlpha"
+    static var heroEnabled = "heroEnabled"
+    static var heroEnabledForSubviews = "heroEnabledForSubviews"
   }
 
   /**
@@ -39,6 +58,24 @@ public extension UIView {
   @IBInspectable public var heroID: String? {
     get { return objc_getAssociatedObject(self, &AssociatedKeys.heroID) as? String }
     set { objc_setAssociatedObject(self, &AssociatedKeys.heroID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+  }
+
+  /**
+   **isHeroEnabled** allows to specify whether a view and its subviews should be consider for animations.
+   If true, Hero will search through all the subviews for heroIds and modifiers. Defaults to true
+   */
+  @IBInspectable public var isHeroEnabled: Bool {
+    get { return objc_getAssociatedObject(self, &AssociatedKeys.heroEnabled) as? Bool ?? true }
+    set { objc_setAssociatedObject(self, &AssociatedKeys.heroEnabled, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+  }
+
+  /**
+   **isHeroEnabledForSubviews** allows to specify whether a view's subviews should be consider for animations.
+   If true, Hero will search through all the subviews for heroIds and modifiers. Defaults to true
+   */
+  @IBInspectable public var isHeroEnabledForSubviews: Bool {
+    get { return objc_getAssociatedObject(self, &AssociatedKeys.heroEnabledForSubviews) as? Bool ?? true }
+    set { objc_setAssociatedObject(self, &AssociatedKeys.heroEnabledForSubviews, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
   }
 
   /**
@@ -66,16 +103,30 @@ public extension UIView {
 
     let imageView = UIImageView(image: image)
     imageView.frame = bounds
-    let snapshotView = UIView(frame:bounds)
-    snapshotView.addSubview(imageView)
-    return snapshotView
+    return SnapshotWrapperView(contentView: imageView)
+  }
+
+  internal func snapshotView() -> UIView? {
+    let snapshot = snapshotView(afterScreenUpdates: true)
+    if #available(iOS 11.0, *), let oldSnapshot = snapshot {
+      // in iOS 11, the snapshot taken by snapshotView(afterScreenUpdates) won't contain a container view
+      return SnapshotWrapperView(contentView: oldSnapshot)
+    } else {
+      return snapshot
+    }
   }
 
   internal var flattenedViewHierarchy: [UIView] {
-    if #available(iOS 9.0, *) {
-      return isHidden && (superview is UICollectionView || superview is UIStackView) ? [] : ([self] + subviews.flatMap { $0.flattenedViewHierarchy })
+    guard isHeroEnabled else { return [] }
+    if #available(iOS 9.0, *), isHidden && (superview is UICollectionView || superview is UIStackView || self is UITableViewCell) {
+      return []
+    } else if isHidden && (superview is UICollectionView || self is UITableViewCell) {
+      return []
+    } else if isHeroEnabledForSubviews {
+      return [self] + subviews.flatMap { $0.flattenedViewHierarchy }
+    } else {
+      return [self]
     }
-    return isHidden && (superview is UICollectionView) ? [] : ([self] + subviews.flatMap { $0.flattenedViewHierarchy })
   }
 
   /// Used for .overFullScreen presentation
@@ -88,7 +139,7 @@ public extension UIView {
     }
     set {
       if let newValue = newValue {
-        objc_setAssociatedObject(self, &AssociatedKeys.heroStoredAlpha, NSNumber(value:newValue.native), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &AssociatedKeys.heroStoredAlpha, NSNumber(value: newValue.native), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
       } else {
         objc_setAssociatedObject(self, &AssociatedKeys.heroStoredAlpha, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
       }

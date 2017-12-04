@@ -11,12 +11,12 @@ import UIKit
 
 struct User {
     var id: String?
-    var fbId: String?
+    var fbId = "none"
     var fbPicURL: String?
     var name: String?
     var email: String?
     var storiesActive: Array<String>?
-    var status = "basic"
+    var premium = false
     var premiumExpires: Date?
     var onboardingDone: Bool?
     var wordsPerLevel: Int?

@@ -13,24 +13,25 @@ import FacebookCore
 import FacebookLogin
 import Firebase
 import FirebaseDatabase
+import PKHUD
+import StoreKit
 
 class SideMenuVC: UIViewController {
     
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var accountType: UILabel!
-    @IBOutlet weak var expirationDate: UILabel!
-    @IBOutlet weak var getPremiumButton: UIButton!
-    @IBAction func getPremiumButtonAction(_ sender: Any) {
-    }
-    
+    @IBOutlet weak var goToFacebookButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     
     var user = User()
+    var linkage: Bool?
+
     
     @objc func loginButtonClicked() {
+        self.askUserToSaveProgressOnFBLogin() { linkage in
         let loginManager = LoginManager()
-        loginManager.logIn([ .publicProfile, .email ], viewController: self) { loginResult in
+            loginManager.logIn(readPermissions: [.publicProfile, .email], viewController: self) { loginResult in
+            HUD.show(.progress)
             switch loginResult {
             case .failed(let error):
                 print(error)
@@ -44,41 +45,64 @@ class SideMenuVC: UIViewController {
                     case .failed(let error):
                         print(error)
                     case .success(let result):
-                        if let resultValue = result.dictionaryValue as Dictionary! {
-                        if let name = resultValue["name"] as? String { self.user.name = name } else { print("fuck1") }
-                        if let email = resultValue["email"] as? String { self.user.email = email } else { print("fuck2") }
-                        if let id = resultValue["id"] as? String { self.user.fbId = id } else { print("fuck3") }
-                            let pictureURL: String  = "https://graph.facebook.com/\(self.user.fbId!)/picture?type=large"
-                            print(pictureURL)
-                        self.user.fbPicURL = pictureURL
-                        self.setUpAccountAfterLogin()
-                        self.checkFBAccount()
-                        self.firebaseLogin()
-}
-                    }
-                })
+                        if linkage {
+                            self.firebaseLogin(link: true)
+                        } else {
+                            self.firebaseLogin(link: false)
+                        }
+                        }
+                    })
+                }
             }
         }
+        }
+    
+    
+    func askUserToSaveProgressOnFBLogin(completion: @escaping ((Bool) -> Void)) {
+        let alert = UIAlertController(title: "Would you like to transfer your current progress under your Facebook account?", message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.default, handler: { action in
+            self.linkage = true
+            completion(self.linkage!)
+             }))
+        alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.default, handler: { action in
+            self.linkage = false
+            completion(self.linkage!)
+            } ))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func userUpdateNotification() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "UserObjectUpdated"), object: self)
-        print("SideMenuVC: UserObjectUpdated notification is sent")
-    }
-    
-    func firebaseLogin() {
+        print("SideMenuVC: UserObjectUpdated notification is sent.") }
+
+    func firebaseLogin(link: Bool) {
+        print("firebaseLogin(): invoked.")
+        HUD.show(.progress)
         let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.authenticationToken)
-        Auth.auth().signIn(with: credential) { (user, error) in
-            if let error = error {
-                // ...
-                return
-            }
+        if link {
             if let user = Auth.auth().currentUser {
-                print("SideMenuVC: User ID is \(user.uid)")
-                print("SideMenuVC: User is logged in Firebase with Facebook")
-            self.user.id = user.uid
-            self.user.wordsPerLevel = 3
-            self.userUpdateNotification() }
+                    user.link(with: credential) { user, error in
+                        if let error = error {
+                        HUD.show(.labeledError(title: "", subtitle: "Account already in use"), onView: nil)
+                        HUD.hide(afterDelay: 2)
+                        AccessToken.current = nil
+                        } else { self.userUpdateNotification()
+                        print("SideMenuVC: User ID is \(user!.uid). Data linked to FB Account.")
+                        self.checkFBAccount() }
+                    }
+                }
+             } else {
+            Auth.auth().signIn(with: credential) { (user, error) in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                if let user = Auth.auth().currentUser {
+                    self.userUpdateNotification()
+                    print("SideMenuVC: User ID is \(user.uid)")
+                    self.checkFBAccount()
+                }
+                }
         }
     }
     
@@ -93,25 +117,19 @@ class SideMenuVC: UIViewController {
         }
         firebaseAuth.signInAnonymously() { (user, error) in
             if let error = error {
-                // ...
+                print(error)
                 return
             }
             if let user = Auth.auth().currentUser {
                 print("SideMenuVC: User ID is \(user.uid)")
                 print("SideMenuVC: User is logged in Firebase Anonymously after logging out from Facebook")
-                self.user.id = user.uid
-                self.user.wordsPerLevel = 3
-                self.userUpdateNotification() }
+                self.userUpdateNotification()
+                self.checkFBAccount()
+            }
         }
     }
     
-    func setUpAccountAfterLogin() {
-        if let image = self.user.picture { profileImage.image = image }
-        if let name = self.user.name { nameLabel.text = name }
-        if let pictureURL = self.user.fbPicURL { self.profileImage.downloadedFrom(link: pictureURL) } else { print("fuck4") }
-    }
-    
-     func logout() {
+    @objc func logout() {
         let loginManager = LoginManager()
         loginManager.logOut()
         self.nameLabel.text = "Anonymous"
@@ -125,13 +143,11 @@ class SideMenuVC: UIViewController {
     
     @objc func checkFBAccount() {
         self.loginButton.removeTarget(nil, action: nil, for: .allEvents)
-        accountType.textColor = UIColor.lightGray
-        expirationDate.textColor = UIColor.lightGray
         if let accessToken = AccessToken.current?.authenticationToken {
             if let name = UserProfile.current?.fullName { nameLabel.text = name }
             print("SideMenuVC: this is saved user profile name " + String(describing: UserProfile.current?.fullName))
             if let url = UserProfile.current?.imageURLWith(.square, size: CGSize(width: 250, height: 250)) {
-                profileImage.downloadedFrom(link: String(describing: url)) } else { print("Pic not downloaded")}
+                self.profileImage.sd_setImage(with: url, placeholderImage: UIImage(named: "Anon"), options: .continueInBackground, completed: nil) } else { print("Pic not downloaded")}
             self.loginButton.setTitle("Logout", for: .normal)
             self.loginButton.setTitleColor(UIColor.red, for: .normal)
             nameLabel.textColor = UIColor.darkText
@@ -147,16 +163,36 @@ class SideMenuVC: UIViewController {
             self.loginButton.addTarget(self, action: #selector(self.loginButtonClicked), for: .touchUpInside)
         }
     }
-
+    
+    func formatDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM dd, yyyy"
+        let stringDate: String = formatter.string(from: date)
+        print(stringDate)
+        return stringDate
+    }
+    
+    @objc func goToFBPage() {
+        UIApplication.shared.openURL(URL(string: "https://fb.me/mnemmal")!)
+    }
+    
+    @objc func openTermsOfUse() {
+        UIApplication.shared.openURL(URL(string: "https://github.com/aerlinn13/mnemmal")!)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.checkFBAccount()
+        self.goToFacebookButton.addTarget(self, action: #selector(self.goToFBPage), for: .touchUpInside)
         profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
         profileImage.layer.masksToBounds = true
         profileImage.layer.borderWidth = 2.0
         profileImage.layer.borderColor = UIColor.groupTableViewBackground.cgColor
-        getPremiumButton.layer.cornerRadius = 10.0
         UserProfile.updatesOnAccessTokenChange = true
-        checkFBAccount()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let tip = true
+        UserDefaults.standard.set(tip, forKey: "tip")
     }
 }

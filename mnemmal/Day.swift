@@ -13,8 +13,4 @@ struct Day {
     let name: String
     let opener: String
     let openerButton: String?
-    let historical: Bool
-    let closer: String
-    let closerOption0: String
-    let closerOption1: String?
 }

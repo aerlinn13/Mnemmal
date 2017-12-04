@@ -15,8 +15,6 @@ class SubmissionContentTableViewCell: UITableViewCell, UICollectionViewDelegate,
     var delegate: WordCollectionDelegate!
     let submitButton: UIButton = UIButton(type: .custom)
     var collectionView: UICollectionView!
-
-    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var textView: MyTextView!
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var myView: UIView!

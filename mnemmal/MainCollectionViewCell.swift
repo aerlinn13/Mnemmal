@@ -13,6 +13,7 @@ class MainCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var scrollingImage: UIImageView!
 
     @IBOutlet weak var storyLabel: UILabel!
+    @IBOutlet weak var subStoryLabel: UILabel!
     
     @IBOutlet weak var statusLabel: UILabel!
     

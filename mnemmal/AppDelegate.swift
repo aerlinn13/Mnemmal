@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics.self])
         return true
     }
-
+    
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         return SDKApplicationDelegate.shared.application(application,
                                                          open: url,
@@ -104,3 +104,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
+

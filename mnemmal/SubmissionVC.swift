@@ -12,20 +12,13 @@ import Hero
 
 class SubmissionVC: UIViewController,
 UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, WordCollectionDelegate, WordDelegate, MnemmalOverlookDelegate, CommentsDelegate, ShareDelegate {
-    
+
     // - MARK: Variables
     
     override var prefersStatusBarHidden: Bool {
         return true
     }
 
-    @IBAction func closeButton(_ sender: Any) {
-        if let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as? SubmissionContentTableViewCell {
-        if cell.textView.text.characters.count != 0 {
-            confirmDismissal()
-        } else { self.dismiss(animated: true, completion: nil)}
-        } else { self.dismiss(animated: true, completion: nil) }
-    }
     @IBOutlet weak var closeOutlet: UIButton!
     @IBOutlet weak var tableView: UITableView!
     
@@ -39,24 +32,37 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     var wordToPass: Word?
     var wordIndexPath: IndexPath?
     var summary: DailySummary?
+    var invokedFromDown: Bool?
 
+    
+    @objc func closeAction() {
+        if let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as? SubmissionContentTableViewCell {
+            if cell.textView.text.count != 0 {
+                confirmDismissal()
+            } else {
+                cell.textView.resignFirstResponder()
+                self.dismiss(animated: true, completion: nil)}
+        } else {
+            self.dismiss(animated: true, completion: nil) }
+    }
     // - MARK: TableView methods
 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return 6
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        prepareWords()
-        
         let cell1 = tableView.dequeueReusableCell(withIdentifier: "SubmissionHeaderTableViewCell") as! SubmissionHeaderTableViewCell
         cell1.selectionStyle = .none
         cell1.scrollingImage.image = story?.image
         cell1.scrollingImage.heroID = "cellImage"
         cell1.headerLabel.text = dayForToday?.name
-        cell1.contentTextView.text = dayForToday?.opener
-        cell1.contentTextView.heroModifiers = [.translate()]
+        cell1.headerLabel.heroID = "label"
+        // cell1.headerLabel.heroModifiers = [.fade]
+        let text = dayForToday!.opener.replacingOccurrences(of: "\\n", with: "\n")
+        cell1.contentTextView.text = text
+        cell1.contentTextView.heroModifiers = [.fade]
         cell1.contentTextView.layer.cornerRadius = 10.0
         if let title = dayForToday?.openerButton { cell1.proceedButton.setTitle(title, for: .normal) } else {
             cell1.proceedButton.setTitle("Start", for: .normal)
@@ -68,73 +74,78 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         
         let cell12 = tableView.dequeueReusableCell(withIdentifier: "SubmissionInterimTableViewCell") as! SubmissionInterimTableViewCell
         cell12.interimImage.image = story?.image
-        cell12.interimImage.contentMode = .left
+        cell12.interimImage.contentMode = .scaleAspectFill
         cell12.interimImage.clipsToBounds = true
-        cell12.interimImage.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell12.interimImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
 
 
         let cell2 = tableView.dequeueReusableCell(withIdentifier: "SubmissionContentTableViewCell") as! SubmissionContentTableViewCell
         cell2.wordsPool = wordsPool
         cell2.submitButton.addTarget(self, action: #selector(submitButtonAct), for: .touchUpInside)
         cell2.textView.textColor = UIColor.darkText
+        cell2.textView.layer.cornerRadius = 10.0
         cell2.textView.delegate = self
         cell2.textView.inputAccessoryView = cell2.collectionView
         cell2.delegate = self
         cell2.selectionStyle = .none
-        cell2.myView.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell2.myView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
 
         let cell23 = tableView.dequeueReusableCell(withIdentifier: "SubmissionInterimTableViewCell") as! SubmissionInterimTableViewCell
         cell23.interimImage.image = story?.image
         cell23.interimImage.clipsToBounds = true
-        cell23.interimImage.contentMode = .right
-        cell23.interimImage.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell23.interimImage.contentMode = .scaleAspectFill
+        cell23.interimImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
         
-        let cell3 = tableView.dequeueReusableCell(withIdentifier: "SubmissionCloserTableViewCell") as! SubmissionCloserTableViewCell
+         /* let cell3 = tableView.dequeueReusableCell(withIdentifier: "SubmissionCloserTableViewCell") as! SubmissionCloserTableViewCell
         cell3.selectionStyle = .none
         cell3.bgImage.image = story?.image
         cell3.textView.text = dayForToday?.closer
         cell3.baseView.layer.cornerRadius = 10.0
         cell3.firstOptionButton.layer.cornerRadius = 10.0
+        cell3.myView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
+        if let option1 = dayForToday!.closerOption1 {
         cell3.firstOptionButton.setTitle(dayForToday?.closerOption0, for: .normal)
         cell3.firstOptionButton.tag = 1
         cell3.firstOptionButton.addTarget(self, action: #selector(goToMnemmals(sender:)), for: .touchUpInside)
         cell3.secondOptionButton.layer.cornerRadius = 10.0
         cell3.secondOptionButton.setTitle(dayForToday?.closerOption1, for: .normal)
         cell3.secondOptionButton.tag = 2
-        cell3.secondOptionButton.addTarget(self, action: #selector(goToMnemmals(sender:)), for: .touchUpInside)
-        cell3.myView.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
-        
-        let cell34 = tableView.dequeueReusableCell(withIdentifier: "SubmissionInterimTableViewCell") as! SubmissionInterimTableViewCell
-        cell34.interimImage.image = story?.image
-        cell34.interimImage.clipsToBounds = true
-        cell34.interimImage.contentMode = .bottomRight
-        cell34.interimImage.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell3.secondOptionButton.addTarget(self, action: #selector(goToMnemmals(sender:)), for: .touchUpInside) } else {
+        cell3.secondOptionButton.isHidden = true
+        cell3.firstOptionButton.layer.cornerRadius = 10.0
+        cell3.firstOptionButton.setTitle(dayForToday?.closerOption0, for: .normal)
+        cell3.firstOptionButton.tag = 1
+        cell3.firstOptionButton.addTarget(self, action: #selector(goToMnemmals(sender:)), for: .touchUpInside)
+        } */
         
         let cell4 = tableView.dequeueReusableCell(withIdentifier: "SubmissionFooterTableViewCell") as! SubmissionFooterTableViewCell
         cell4.selectionStyle = .none
+        let footer = UIView()
+        footer.frame = CGRect(x: 0, y: 0, width: 100, height: 60)
+        footer.backgroundColor = .clear
+        footer.isUserInteractionEnabled = false
+        cell4.tableView.tableFooterView = footer
         cell4.mnemmalOverlookDelegate = self
         cell4.shareDelegate = self
         self.mnemmals.sort { $0.time > $1.time }
         cell4.mnemmals = self.mnemmals
-        cell4.completeButton.layer.cornerRadius = 10.0
-        cell4.completeButton.addTarget(self, action: #selector(goToMainVC), for: .touchUpInside)
-        cell4.myView.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell4.myView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
         
         let cell40 = tableView.dequeueReusableCell(withIdentifier: "SubmissionInterimTableViewCell") as! SubmissionInterimTableViewCell
         cell40.interimImage.image = story?.image
         cell40.interimImage.clipsToBounds = true
-        cell40.interimImage.contentMode = .bottomLeft
-        cell40.interimImage.heightAnchor.constraint(greaterThanOrEqualToConstant: tableView.frame.height).isActive = true
+        cell40.interimImage.contentMode = .scaleAspectFill
+        cell40.interimImage.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height).isActive = true
         
         switch indexPath.row {
         case 0: return cell1 // opener
         case 1: return cell12 // interim
         case 2: return cell2 // content submission
         case 3: return cell23 // interim
-        case 4: return cell3 // closer
-        case 5: return cell34 // interim
-        case 6: return cell4 // mnemmals
-        case 7: return cell40 // interim-closer
+        case 4: return cell4 // closer
+        case 5: return cell40 // interim
+        // case 6: return cell4 // mnemmals
+        // case 7: return cell40 // interim-closer
         default: break
         }
         
@@ -174,16 +185,16 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     
     func checkHeaderViewColor() {
         if let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as? SubmissionContentTableViewCell {
-        cell.headerLabel.text = String(describing: 300 - cell.textView.text.characters.count)
-        if cell.textView.text.characters.count < 50 {
-            cell.headerView.backgroundColor = UIColor(red: 6/255.0, green: 71/255.0, blue: 128/255.0, alpha: 1)
+        cell.headerLabel.text = String(describing: 250 - cell.textView.text.count)
+        if cell.textView.text.count < 50 {
+            cell.headerLabel.textColor = UIColor.lightGray
             cell.submitButton.isHidden = true
-        } else if cell.textView.text.characters.count < 280 {
-                cell.headerView.backgroundColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
+        } else if cell.textView.text.count < 230 {
+                cell.headerLabel.textColor = UIColor(red: 112/255.0, green: 216/255.0, blue: 86/255.0, alpha: 1)
             cell.submitButton.isHidden = false
         } else {
-            cell.headerView.backgroundColor = UIColor.red
-        if cell.textView.text.characters.count == 300 { cell.textView.text.removeLast(1) }
+            cell.headerLabel.textColor = UIColor.red
+        if cell.textView.text.count == 250 { cell.textView.text.removeLast(1) }
         }
         cell.textView.text = cell.textView.text.replacingOccurrences(of: "  ", with: " ")
     }
@@ -191,7 +202,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as! SubmissionContentTableViewCell
-        if cell.textView.text.count < 301 { return true }
+        if cell.textView.text.count < 251 { return true }
         else { return false }
     }
     
@@ -215,6 +226,10 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     
    @objc func goToContentSubmission() {
     print("goToContentSubmission(): invoked")
+    if self.story!.isNews {
+        if !invokedFromDown! {
+            self.fetchDelegate.getStory(initialStoryTrack: "0", fromSubmission: true) }
+    }
     scrolling = true
     self.tableView.selectRow(at: IndexPath(item: 1, section: 0), animated: true, scrollPosition: .bottom)
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -226,8 +241,12 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
             cell.textView.becomeFirstResponder() }
     })
     }
-    
-    func goToCloser() {
+
+    @objc func goToMnemmals() {
+        print("goToMnemmals(): invoked")
+        self.retrieveMnemmals()
+        let option = "0"
+        self.updateStoryTrack(option)
         scrolling = true
         print("goToCloser(): invoked")
         if let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as? SubmissionContentTableViewCell {
@@ -235,40 +254,30 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
             cell.textView.reloadInputViews()
             cell.textView.resignFirstResponder()
         }
-        self.tableView.selectRow(at: IndexPath(item: 3, section: 0), animated: true, scrollPosition: .bottom)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7, execute: {
-            self.tableView.selectRow(at: IndexPath(item: 4, section: 0), animated: true, scrollPosition: .top)
-        })
-        
-    }
-    
-    
-    @objc func goToMnemmals(sender: UIButton!) {
-        print("goToMnemmals(): invoked")
-        self.retrieveMnemmals()
-        let option = String(sender.tag - 1)
-        self.updateStoryTrack(option)
         self.submitDailySummary(option: option)
-        self.tableView.selectRow(at: IndexPath(item: 5, section: 0), animated: true, scrollPosition: .bottom)
-        self.closeOutlet.isHidden = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-            self.tableView.selectRow(at: IndexPath(item: 6, section: 0), animated: true, scrollPosition: .top)
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: 6, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals
-                cell.tableView.reloadData() }
-            
+        self.tableView.selectRow(at: IndexPath(item: 3, section: 0), animated: true, scrollPosition: .bottom)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            self.tableView.selectRow(at: IndexPath(item: 4, section: 0), animated: true, scrollPosition: .top)
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: 4, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals
+                cell.tableView.reloadData()
+                self.closeOutlet.removeTarget(nil, action: nil, for: .allEvents)
+                self.closeOutlet.setImage(UIImage(named: "done"), for: .normal)
+                self.closeOutlet.addTarget(self, action: #selector(self.goToMainVC), for: .touchUpInside)
+        }
         })
     }
+    
     
     @objc func goToMainVC() {
     print("goToMainVC(): invoked")
-        self.tableView.selectRow(at: IndexPath(item: 7, section: 0), animated: true, scrollPosition: .middle)
+    self.closeOutlet.isHidden = true
+        self.fetchDelegate.loadSummariesForStoriesDown()
+        self.tableView.selectRow(at: IndexPath(item: 5, section: 0), animated: true, scrollPosition: .middle)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7, execute: {
             self.dismiss(animated: true, completion: nil)
         })
     }
-    
 
-    
     // - MARK: Actions on Submit button
     
     @objc func submitButtonAct() {
@@ -278,8 +287,8 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         submitMnemmal()
         submitWordsAsUsed()
         increaseStoryLevel()
-        fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, completedStatus: (self.story?.completed)!, indexPath: self.storyIndexPath!)
-        goToCloser()
+        fetchDelegate.fetchWordsAfterSubmission(storyLevel: (self.story?.storyLevel)!, completedStatus: (self.story?.completed)!, indexPath: self.storyIndexPath!, isNews: story!.isNews)
+        goToMnemmals()
     }
     
     var mnemmalSent: Mnemmal?
@@ -288,7 +297,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         print("submitMnemmal(): invoked")
         let cell = tableView.cellForRow(at: IndexPath(item: 2, section: 0)) as! SubmissionContentTableViewCell
         let userId = self.user!.id!
-        let fbId = self.user!.fbId ?? "none"
+        let fbId = self.user!.fbId
         let userName = self.user!.name!
         let storyId = self.story!.id
         let storyTrack = self.user!.storyTrack[story!.id]
@@ -297,23 +306,11 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         let content = cell.textView.text
         let mnemmal = Mnemmal(id: id, userId: userId, fbId: fbId, userName: userName, storyId: storyId, storyTrack: storyTrack!, time: time, likesAmount: "0", content: content!, liked: false)
         self.mnemmalSent = mnemmal
-        let userRef = Database.database().reference().child("users/\(userId)/stories/\(storyId)/instances/\(storyTrack!)").childByAutoId()
-        userRef.child("ID").setValue(id)
-        userRef.child("userID").setValue(userId)
-        userRef.child("fbID").setValue(fbId)
-        userRef.child("userName").setValue(userName)
-        print("submitMnemmal(): username is: " + userName)
-        userRef.child("storyID").setValue(storyId)
-        userRef.child("storyTrack").setValue(storyTrack!)
-        userRef.child("time").setValue(time)
-        userRef.child("content").setValue(content)
-        print("submitMnemmal(): Mnemmal submitted for userID: \(userId)")
-        let genRef = Database.database().reference().child("stories/\(storyId)/instances/\(storyTrack!)").childByAutoId()
+        let genRef = Database.database().reference().child("mnemmals/\(storyId)/\(storyTrack!)").child(userId)
         genRef.child("ID").setValue(id)
         genRef.child("userID").setValue(userId)
         genRef.child("fbID").setValue(fbId)
         genRef.child("userName").setValue(userName)
-        print("submitMnemmal(): username is: " + userName)
         genRef.child("storyID").setValue(storyId)
         genRef.child("storyTrack").setValue(storyTrack!)
         genRef.child("time").setValue(time)
@@ -326,21 +323,23 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     
     func submitDailySummary(option: String) {
         print("submitDailySummary(): invoked")
-        // submitting DailySummary
         if let mnemmal = self.mnemmalSent {
-            let summaryRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(mnemmal.storyId)/summaries/\(mnemmal.storyTrack)")
+        let summaryRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(mnemmal.storyId)/summaries/\(mnemmal.storyTrack)")
+        
         summaryRef.child("ID").setValue(mnemmal.id)
         summaryRef.child("storyTrack").setValue(mnemmal.storyTrack)
-        summaryRef.child("title").setValue(self.dayForToday?.name)
-        summaryRef.child("opener").setValue(self.dayForToday?.opener)
+        summaryRef.child("title").setValue(self.dayForToday!.name)
+        summaryRef.child("opener").setValue(self.dayForToday!.opener)
         summaryRef.child("mnemmalContent").setValue(mnemmal.content)
         summaryRef.child("mnemmalDate").setValue(mnemmal.time)
-            summaryRef.child("closer").setValue(self.dayForToday?.closer)
-        switch option {
-            case "0": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption0)
-            case "1": summaryRef.child("chosenOption").setValue(self.dayForToday?.closerOption1)
-        default: break
-        }
+        var words = Array<Word>()
+        for word in self.wordsPoolBackup {
+                let summaryWordsRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(mnemmal.storyId)/summaries/\(mnemmal.storyTrack)/words/").childByAutoId()
+                summaryWordsRef.setValue(word.id)
+                words.append(word)
+            }
+            let summary = DailySummary(id: mnemmal.id, storyTrack: mnemmal.storyTrack, title: self.dayForToday!.name, opener: self.dayForToday!.opener, mnemmalContent: mnemmal.content, mnemmalDate: mnemmal.time, wordsObj: words)
+            fetchDelegate.addSummaryForStory(summary: summary)
             print("submitDailySummary(): dailySummary has been submitted")
     }
     }
@@ -388,7 +387,8 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
     
     func updateStoryTrack(_ option: String) {
         print("updateStoryTrack(): is invoked")
-        user?.storyTrack[story!.id]?.append(option)
+        user!.storyTrack[story!.id] = user!.storyTrack[story!.id]! + option
+        self.fetchDelegate.updateStoryTrack(track: user!.storyTrack[story!.id]!, storyId: story!.id)
         print("updateStoryTrack(): story track for story now is " + (user?.storyTrack[story!.id])!)
         let storyTrackRef = Database.database().reference().child("users/\(self.user!.id!)/stories/\(self.story!.id)/storyTrack")
         let track = user!.storyTrack[story!.id]!
@@ -412,6 +412,9 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         performSegue(withIdentifier: "wordOverlook", sender: self)
     }
     
+    func performWordOutlook(word: Word) {
+        
+    }
     
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      if segue.identifier == "wordOverlook" {
@@ -486,15 +489,6 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         performSegue(withIdentifier: "mnemmalOverlook", sender: self)
     }
         
-    // - MARK: Configuring for presentation
-    
-    func prepareWords() {
-        print("prepareWords(): invoked")
-        if let wpb = story!.wordsObj {
-            wordsPoolBackup = wpb } else { print("HUI") }
-        wordsPool = wordsPoolBackup
-        print("wordsPool count is " + String(describing: wordsPool.count))
-    }
     
     // - MARK: Firebase methods
     
@@ -505,7 +499,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
         if let storyId = self.story?.id {
             let storyTrack = self.user!.storyTrack[storyId]!
             print("retrieveMnemmals(): storyTrack is: " + storyTrack)
-            let storyRef = Database.database().reference().child("stories/\(storyId)/instances/\(storyTrack)")
+            let storyRef = Database.database().reference().child("mnemmals/\(storyId)/\(storyTrack)")
             storyRef.keepSynced(true)
             storyRef.observeSingleEvent(of: .value, with: { snapshot in
                 if let snapshots = snapshot.children.allObjects as? [DataSnapshot] {
@@ -591,20 +585,33 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
             }
                 }
             })
-            if let cell = self.tableView.cellForRow(at: IndexPath(item: 6, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals
+            if let cell = self.tableView.cellForRow(at: IndexPath(item: 4, section: 0)) as? SubmissionFooterTableViewCell { cell.mnemmals = self.mnemmals
                 cell.tableView.reloadData() }
         })
         }
     
+    func prepareWords() {
+        if let words = self.story!.wordsObj as? [Word] {
+            self.wordsPoolBackup = words
+            self.wordsPool = words
+        }
+    }
+    
+
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        dayForToday = story?.days[(user?.storyTrack[(story?.id)!])!]
+        self.prepareWords()
+        self.closeOutlet.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
+        self.dayForToday = story?.days[(user?.storyTrack[(story?.id)!])!]
         tableView.isScrollEnabled = true
         print("viewDidLoad(): user name is: " + self.user!.name!)
         
         // HERO
-        closeOutlet.heroModifiers = [.rotate(-1.6)]
-        
+        self.closeOutlet.heroModifiers = [.fade]
+        self.closeOutlet.heroID = "statusLabel"
+
         
         // tableView nibs
         let nib1 = UINib(nibName: "SubmissionHeaderTableViewCell", bundle: nil)
@@ -620,6 +627,7 @@ UITextViewDelegate, UITableViewDelegate, UITableViewDataSource, UITextFieldDeleg
 
         tableView.estimatedRowHeight = tableView.frame.height
         tableView.rowHeight = UITableViewAutomaticDimension
+        
         
     }
 }

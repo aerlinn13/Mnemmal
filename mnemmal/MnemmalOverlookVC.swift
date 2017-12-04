@@ -169,9 +169,9 @@ class MnemmalOverlookTVC: UITableViewController, UITextViewDelegate, SwipeTableV
 
     @objc func dismissal() {
         print("dismissal(): invoked")
-        textInputBar.textView.resignFirstResponder()
-        self.dismiss(animated: true, completion: nil)
         commentsDelegate.updateMnemmalComments()
+        // textInputBar.textView.resignFirstResponder()
+        self.dismiss(animated: true, completion: nil)
     }
     
     @objc func copyText() {

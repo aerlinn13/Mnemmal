@@ -3,10 +3,11 @@
 [![Build Status](https://travis-ci.org/jerkoch/SwipeCellKit.svg)](https://travis-ci.org/jerkoch/SwipeCellKit) 
 [![Version Status](https://img.shields.io/cocoapods/v/SwipeCellKit.svg)][podLink] 
 [![Swift 3.0](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 4.0](https://img.shields.io/badge/Swift-4.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![license MIT](https://img.shields.io/cocoapods/l/SwipeCellKit.svg)][mitLink] 
 [![Platform](https://img.shields.io/cocoapods/p/SwipeCellKit.svg)][docsLink] 
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Twitter](https://img.shields.io/badge/twitter-@jerkoch-blue.svg?style=flat)](https://twitter.com/mkurabi)
+[![Twitter](https://img.shields.io/badge/twitter-@mkurabi-blue.svg?style=flat)](https://twitter.com/mkurabi)
 
 *Swipeable UITableViewCell based on the stock Mail.app, implemented in Swift.*
 
@@ -87,9 +88,6 @@ use_frameworks!
 # Latest release in CocoaPods
 pod 'SwipeCellKit'
 
-# Latest Swift 4 release in CocoaPods
-pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'swift4'
-
 # Get the latest on develop
 pod 'SwipeCellKit', :git => 'https://github.com/SwipeCellKit/SwipeCellKit.git', :branch => 'develop'
 ````
@@ -153,6 +151,10 @@ Three built-in transition styles are provided by `SwipeTransitionStyle`:
 
 See [Customizing Transitions](https://github.com/SwipeCellKit/SwipeCellKit/blob/develop/Guides/Advanced.md) for more details on customizing button appearance as the swipe is performed.
 
+#### Transition Delegate
+
+Transition for a `SwipeAction` can be observered by setting a `SwipeActionTransitioning` on the `transitionDelegate` property. This allows you to observe what percentage is visible and access to the underlying `UIButton` for that `SwipeAction`. 
+
 ### Expansion
 
 Four built-in expansion styles are provided by `SwipeExpansionStyle`:  
@@ -207,5 +209,5 @@ We're interested in knowing [who's using *SwipeCellKit*](https://github.com/Swip
 *Please provide attribution, it is greatly appreciated.*
 
 [podLink]:https://cocoapods.org/pods/SwipeCellKit
-[docsLink]:http://www.jerkoch.com/SwipeCellKit
+[docsLink]:https://swipecellkit.github.io/SwipeCellKit/
 [mitLink]:http://opensource.org/licenses/MIT

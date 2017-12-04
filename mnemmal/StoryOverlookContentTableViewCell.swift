@@ -12,8 +12,6 @@ class StoryOverlookContentTableViewCell: UITableViewCell {
 
     @IBOutlet weak var epigraph: UILabel!
     @IBOutlet weak var textField: UILabel!
-    @IBOutlet weak var choosePartyLabel: UILabel!
-    @IBOutlet weak var firstPartyButton: UIButton!
     @IBOutlet weak var secondPartyButton: UIButton!
     
     override func awakeFromNib() {

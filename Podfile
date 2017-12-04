@@ -21,7 +21,7 @@ pod 'Crashlytics'
 pod 'Hero'
 pod 'ALTextInputBar'
 pod 'SwipeCellKit'
- 
+pod 'AMPopTip' 
  target 'mnemmalTests' do
     inherit! :search_paths
     # Pods for testing

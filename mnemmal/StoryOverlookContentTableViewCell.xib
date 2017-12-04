@@ -20,33 +20,18 @@
                 <rect key="frame" x="0.0" y="0.0" width="433" height="229.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0pS-LD-zag">
-                        <rect key="frame" x="16" y="49" width="401" height="18"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0pS-LD-zag">
+                        <rect key="frame" x="16" y="44" width="401" height="117.5"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbh-2Q-dlp">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="253" verticalCompressionResistancePriority="752" text="Label" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbh-2Q-dlp">
                         <rect key="frame" x="16" y="16" width="401" height="18"/>
                         <fontDescription key="fontDescription" type="italicSystem" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iQM-mG-Byu">
-                        <rect key="frame" x="16" y="114.5" width="401" height="40"/>
-                        <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="40" id="Z03-hX-U75"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                        <color key="tintColor" red="0.023529411760000001" green="0.2784313725" blue="0.50196078430000002" alpha="1" colorSpace="calibratedRGB"/>
-                        <state key="normal" title="firstParty"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                <integer key="value" value="10"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </button>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2OB-S4-gHs">
                         <rect key="frame" x="16" y="169.5" width="401" height="40"/>
                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -62,37 +47,23 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="752" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lD4-U8-Fd2">
-                        <rect key="frame" x="16" y="82" width="401" height="22.5"/>
-                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="2OB-S4-gHs" secondAttribute="trailing" constant="8" id="1Wr-8N-fpF"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="lD4-U8-Fd2" secondAttribute="trailing" constant="8" id="279-EP-V0h"/>
-                    <constraint firstItem="iQM-mG-Byu" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="LI5-Jp-cMj"/>
-                    <constraint firstItem="lD4-U8-Fd2" firstAttribute="top" secondItem="0pS-LD-zag" secondAttribute="bottom" constant="15" id="MKE-OP-xK9"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="iQM-mG-Byu" secondAttribute="trailing" constant="8" id="RDK-nV-Mdi"/>
-                    <constraint firstItem="0pS-LD-zag" firstAttribute="top" secondItem="dbh-2Q-dlp" secondAttribute="bottom" constant="15" id="St8-xd-5sD"/>
+                    <constraint firstItem="0pS-LD-zag" firstAttribute="top" secondItem="dbh-2Q-dlp" secondAttribute="bottom" constant="10" id="St8-xd-5sD"/>
                     <constraint firstAttribute="trailingMargin" secondItem="dbh-2Q-dlp" secondAttribute="trailing" constant="8" id="Z4F-91-CWP"/>
                     <constraint firstAttribute="trailingMargin" secondItem="0pS-LD-zag" secondAttribute="trailing" constant="8" id="dtN-MB-38d"/>
-                    <constraint firstItem="lD4-U8-Fd2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="e4j-2F-OQB"/>
                     <constraint firstItem="0pS-LD-zag" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="eDr-Og-HUd"/>
-                    <constraint firstItem="iQM-mG-Byu" firstAttribute="top" secondItem="lD4-U8-Fd2" secondAttribute="bottom" constant="10" id="gH3-K8-RZ7"/>
                     <constraint firstItem="dbh-2Q-dlp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="hDi-x0-PuE"/>
+                    <constraint firstItem="2OB-S4-gHs" firstAttribute="top" secondItem="0pS-LD-zag" secondAttribute="bottom" constant="8" id="jEQ-61-HFF"/>
                     <constraint firstAttribute="bottom" secondItem="2OB-S4-gHs" secondAttribute="bottom" constant="20" id="nug-C7-fSk"/>
-                    <constraint firstItem="2OB-S4-gHs" firstAttribute="top" secondItem="iQM-mG-Byu" secondAttribute="bottom" constant="15" id="vWD-JL-ixJ"/>
                     <constraint firstItem="2OB-S4-gHs" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="8" id="yPg-7p-hYD"/>
                     <constraint firstItem="dbh-2Q-dlp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="8" id="zPq-H0-XVM"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="choosePartyLabel" destination="lD4-U8-Fd2" id="yaZ-M8-J2q"/>
                 <outlet property="epigraph" destination="dbh-2Q-dlp" id="XAF-WZ-6HU"/>
-                <outlet property="firstPartyButton" destination="iQM-mG-Byu" id="jjb-uC-43p"/>
                 <outlet property="secondPartyButton" destination="2OB-S4-gHs" id="Lyg-6u-bfB"/>
                 <outlet property="textField" destination="0pS-LD-zag" id="eQG-Uc-a1W"/>
             </connections>

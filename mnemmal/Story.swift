@@ -12,16 +12,12 @@ import UIKit
 class Story {
     var isActive: Bool = false
     var title: String = ""
+    var subtitle: String = ""
     var daysAmount: Int = 0
     var id: String = ""
-    var genre: String = ""
     var words: Array<String> = [String]()
     var subtext: String = ""
     var epigraph: String = ""
-    var premium: Bool = false
-    var titleColor: String = ""
-    var wordsColor: String = ""
-    var hidden: Bool = false
     var storyLevel = "1"
     var image = UIImage()
     var wordsObj: Array<Word>?
@@ -31,23 +27,22 @@ class Story {
     var days: Dictionary<String, Day> = [String: Day]()
     var completed: Bool = false
     var firstParty: String?
-    var secondParty: String?
     var summaries: Dictionary<String,DailySummary> = [String: DailySummary]()
+    var checked = false
+    let isNews: Bool
+    let onStand: Bool
     
-    init(isActive: Bool, title: String, daysAmount: Int, id: String, genre: String, words: Array<String>, subtext: String, epigraph: String, premium: Bool, titleColor: String, wordsColor: String, hidden: Bool, firstParty: String, secondParty: String) {
+    init(isActive: Bool, title: String, subtitle: String, daysAmount: Int, id: String, words: Array<String>, subtext: String, epigraph: String, firstParty: String, isNews: Bool, onStand: Bool) {
         self.isActive = isActive
         self.title = title
+        self.subtitle = subtitle
         self.daysAmount = daysAmount
         self.id = id
-        self.genre = genre
         self.words = words
         self.subtext = subtext
         self.epigraph = epigraph
-        self.premium = premium
-        self.titleColor = titleColor
-        self.wordsColor = wordsColor
-        self.hidden = hidden
         self.firstParty = firstParty
-        self.secondParty = secondParty
+        self.isNews = isNews
+        self.onStand = onStand
     }
 }
