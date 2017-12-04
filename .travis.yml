@@ -1,6 +1,2 @@
 language: swift
-os: osx
-osx_image: xcode9.1
-xcode_project: mnemmal.xcworkspace #3
-xcode_scheme: mnemmal #4
-xcode_sdk: iphonesimulator11.0  #5
+script: xcodebuild -workspace mnemmal.xcworkspace -scheme mnemmal -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
